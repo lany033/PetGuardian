@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.lab.petguardian.R
+import com.lab.petguardian.model.presentation.Presentation
 
 @Composable
 fun PresentationScreen() {
@@ -82,17 +83,18 @@ fun PresentationScreen() {
 fun HorizontalPagerHomeScreen(modifier: Modifier) {
 
     val listPresentation = listOf(
-        com.lab.petguardian.model.presentation.Presentation(
+
+        Presentation(
             "Title 1",
             "Description 1",
             R.mipmap.dog_hero_hd
         ),
-        com.lab.petguardian.model.presentation.Presentation(
+        Presentation(
             "Title 2",
             "Description 2",
             R.mipmap.cat_love_dog
         ),
-        com.lab.petguardian.model.presentation.Presentation(
+        Presentation(
             "Title 3",
             "Description 3",
             R.mipmap.cat_playing
@@ -202,7 +204,8 @@ fun DragHandleCustom() {
         ) {}
         Box(
             modifier = Modifier
-                .fillMaxWidth().padding(16.dp)
+                .fillMaxWidth()
+                .padding(16.dp)
         ) {
             Text(
                 modifier = Modifier.align(Alignment.TopStart),
@@ -253,6 +256,7 @@ fun PetGuardianLogin() {
             icon = R.drawable.ic_google,
             color = Color.LightGray
         )
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
