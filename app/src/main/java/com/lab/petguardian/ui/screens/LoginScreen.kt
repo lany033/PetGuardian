@@ -1,20 +1,21 @@
-package com.lab.petguardian.screens
+package com.lab.petguardian.ui.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -31,9 +32,8 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,38 +43,48 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.lab.petguardian.R
 import com.lab.petguardian.model.presentation.Presentation
+import com.lab.petguardian.ui.common.CommonButton
+import com.lab.petguardian.ui.common.CommonTextFieldWithTextAbove
+import com.lab.petguardian.ui.theme.PetGuardianTheme
+
 
 @Composable
-fun PresentationScreen() {
+fun LoginScreen() {
 
     var showBottomSheet by remember { mutableStateOf(false) }
 
     if (showBottomSheet) {
         LoginBottomSheet(onDismiss = { showBottomSheet = false })
     }
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        HorizontalPagerHomeScreen(Modifier.align(Alignment.Center))
-        Button(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(start = 18.dp, end = 18.dp, bottom = 60.dp)
-                .fillMaxWidth(),
-            onClick = { showBottomSheet = true },
-            shape = RoundedCornerShape(10.dp)
-        ) {
-            Text(text = "Get Started")
+    Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing
+    ) { innerppading ->
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(innerppading)) {
+            HorizontalPagerHomeScreen(Modifier.align(Alignment.Center))
+            CommonButton(
+                onClick = { showBottomSheet = true },
+                text = "Get Started",
+                color = Color.Green,
+                modifier = Modifier
+                    .align(
+                        Alignment.BottomCenter
+                    )
+                    .padding(horizontal = 16.dp)
+            )
         }
     }
+
 }
 
 
@@ -149,7 +159,11 @@ fun CarrouselItem(image: Int, title: String, description: String) {
         modifier = Modifier.padding(start = 16.dp, end = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Card(shape = RoundedCornerShape(25.dp), modifier = Modifier.size(400.dp), elevation = CardDefaults.cardElevation(10.dp)) {
+        Card(
+            shape = RoundedCornerShape(25.dp),
+            modifier = Modifier.size(400.dp),
+            elevation = CardDefaults.cardElevation(10.dp)
+        ) {
             Image(
                 modifier = Modifier.fillMaxSize(),
                 painter = rememberAsyncImagePainter(model = image),
@@ -229,24 +243,11 @@ fun DragHandleCustom() {
 fun PetGuardianLogin() {
     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
-        Card(colors = CardDefaults.cardColors(containerColor = Color.Transparent), shape = RectangleShape) {
-            Text(modifier = Modifier.padding(start = 2.dp, bottom = 6.dp), text = "E-MAIL ADDRESS", fontSize = 12.sp, fontWeight = FontWeight.Bold)
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(1.dp, Color.Gray, shape = RoundedCornerShape(12.dp)),
-                placeholder = { Text(text = "E-mail address") },
-                value = "",
-                onValueChange = {},
-                colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent
-                )
-            )
-        }
-        LoginButton(onClick = { /*TODO*/ }, text = "Continue", color = Color.LightGray)
+        CommonTextFieldWithTextAbove(
+            textAbove = "E-MAIL ADDRESS",
+            placeholderText = "E-mail address"
+        )
+        CommonButton(onClick = { /*TODO*/ }, text = "Continue", color = Color.LightGray, modifier = Modifier)
         ForgotPassword()
         SignUp()
         LoginDivider()
@@ -288,26 +289,6 @@ fun LoginSocialButton(onClick: () -> Unit, text: String, icon: Int, color: Color
     }
 }
 
-
-@Composable
-fun LoginButton(onClick: () -> Unit, text: String, color: Color) {
-    Button(
-        modifier = Modifier.fillMaxWidth(),
-        onClick = { onClick() },
-        shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = color)
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(start = 12.dp, end = 12.dp, top = 10.dp, bottom = 10.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(text = text, fontSize = 15.sp)
-        }
-    }
-}
 
 @Composable
 fun LoginDivider() {
@@ -355,4 +336,12 @@ fun ForgotPassword() {
         fontWeight = FontWeight.Bold,
         color = Color(0xFF4EA8E9)
     )
+}
+
+@Preview
+@Composable
+fun LoginScreenPreview(){
+    PetGuardianTheme {
+        LoginScreen()
+    }
 }
