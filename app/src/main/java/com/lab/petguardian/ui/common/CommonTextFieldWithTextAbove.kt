@@ -16,16 +16,18 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.lab.petguardian.ui.theme.Geraldine
+import com.lab.petguardian.ui.theme.SaffronMango
 
 @Composable
 fun CommonTextFieldWithTextAbove(textAbove: String, placeholderText:String){
     Card(colors = CardDefaults.cardColors(containerColor = Color.Transparent), shape = RectangleShape) {
-        Text(modifier = Modifier.padding(start = 2.dp, bottom = 6.dp), text = textAbove, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+        Text(modifier = Modifier.padding(start = 2.dp, bottom = 6.dp), text = textAbove, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Geraldine)
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .border(1.dp, Color.Gray, shape = RoundedCornerShape(12.dp)),
-            placeholder = { Text(text = placeholderText) },
+                .border(1.dp, Geraldine, shape = RoundedCornerShape(12.dp)),
+            placeholder = { Text(text = placeholderText, color = SaffronMango) },
             value = "",
             onValueChange = {},
             colors = TextFieldDefaults.colors(

@@ -1,5 +1,6 @@
 package com.lab.petguardian.ui.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -45,7 +46,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -54,7 +57,10 @@ import com.lab.petguardian.R
 import com.lab.petguardian.model.presentation.Presentation
 import com.lab.petguardian.ui.common.CommonButton
 import com.lab.petguardian.ui.common.CommonTextFieldWithTextAbove
+import com.lab.petguardian.ui.theme.Geraldine
+import com.lab.petguardian.ui.theme.PalePrim
 import com.lab.petguardian.ui.theme.PetGuardianTheme
+import com.lab.petguardian.ui.theme.SaffronMango
 
 
 @Composable
@@ -75,12 +81,11 @@ fun LoginScreen() {
             CommonButton(
                 onClick = { showBottomSheet = true },
                 text = "Get Started",
-                color = Color.Green,
                 modifier = Modifier
                     .align(
                         Alignment.BottomCenter
                     )
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 16.dp).padding(bottom = 16.dp)
             )
         }
     }
@@ -133,14 +138,14 @@ fun HorizontalPagerHomeScreen(modifier: Modifier) {
         }
         Card(
             modifier = Modifier.padding(10.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.LightGray)
+            colors = CardDefaults.cardColors(containerColor = SaffronMango)
         ) {
             Row(
                 horizontalArrangement = Arrangement.Center
             ) {
                 repeat(listPresentation.size) { iteration ->
                     val color =
-                        if (pagerState.currentPage == iteration) Color.White else Color.Gray
+                        if (pagerState.currentPage == iteration) PalePrim else Geraldine
                     Box(
                         modifier = Modifier
                             .padding(5.dp)
@@ -177,13 +182,11 @@ fun CarrouselItem(image: Int, title: String, description: String) {
         ) {
             Text(
                 text = title,
-                color = Color.Red,
                 fontSize = 35.sp,
                 fontWeight = FontWeight.Bold,
             )
             Text(
                 text = description,
-                color = Color.Red,
                 fontSize = 12.sp,
                 maxLines = 2,
                 lineHeight = 12.sp
@@ -214,7 +217,7 @@ fun DragHandleCustom() {
             modifier = Modifier
                 .height(4.dp)
                 .width(100.dp)
-                .background(Color.Gray, RoundedCornerShape(4.dp))
+                .background(Geraldine, RoundedCornerShape(4.dp))
         ) {}
         Box(
             modifier = Modifier
@@ -225,20 +228,22 @@ fun DragHandleCustom() {
                 modifier = Modifier.align(Alignment.TopStart),
                 fontSize = 22.sp,
                 text = "Continue with",
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Geraldine
             )
             Text(
                 modifier = Modifier.align(Alignment.TopEnd),
                 fontSize = 18.sp,
                 text = "Cancel",
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Geraldine
             )
         }
         Divider()
     }
 
 }
-
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun PetGuardianLogin() {
     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -247,27 +252,26 @@ fun PetGuardianLogin() {
             textAbove = "E-MAIL ADDRESS",
             placeholderText = "E-mail address"
         )
-        CommonButton(onClick = { /*TODO*/ }, text = "Continue", color = Color.LightGray, modifier = Modifier)
+        CommonButton(onClick = { /*TODO*/ }, text = "Continue", modifier = Modifier)
         ForgotPassword()
         SignUp()
         LoginDivider()
         LoginSocialButton(
             onClick = { /*TODO*/ },
             text = "Continue with Google",
-            icon = R.drawable.ic_google,
-            color = Color.LightGray
+            icon = R.drawable.ic_google
         )
         Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
 @Composable
-fun LoginSocialButton(onClick: () -> Unit, text: String, icon: Int, color: Color) {
+fun LoginSocialButton(onClick: () -> Unit, text: String, icon: Int) {
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = { onClick() },
         shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(1.dp, color),
+        border = BorderStroke(1.dp, Geraldine),
         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
     ) {
         Row(
@@ -284,7 +288,7 @@ fun LoginSocialButton(onClick: () -> Unit, text: String, icon: Int, color: Color
                 tint = Color.Unspecified
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = text, fontSize = 15.sp)
+            Text(text = text, fontSize = 15.sp, color = Geraldine, fontWeight = FontWeight.Bold)
         }
     }
 }
@@ -296,19 +300,21 @@ fun LoginDivider() {
         Divider(
             Modifier
                 .height(1.dp)
-                .weight(1f)
+                .weight(1f),
+            color = Geraldine
         )
         Text(
             text = "OR",
             modifier = Modifier.padding(horizontal = 20.dp),
             fontSize = 12.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFFB5B5B5)
+            color = Geraldine
         )
         Divider(
             Modifier
                 .height(1.dp)
-                .weight(1f)
+                .weight(1f),
+            color = Geraldine
         )
     }
 }
@@ -316,13 +322,14 @@ fun LoginDivider() {
 @Composable
 fun SignUp() {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        Text(text = "Don't have an account?", fontSize = 12.sp, color = Color(0xFFB5B5B5))
+        Text(text = "Don't have an account?", fontSize = 12.sp, color = SaffronMango)
         Spacer(modifier = Modifier.size(5.dp))
         Text(
             modifier = Modifier.clickable { }, text = "Sign up.",
             fontSize = 12.sp,
+            textDecoration = TextDecoration.Underline,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFF4EA8E9)
+            color = Geraldine
         )
 
     }
@@ -334,7 +341,8 @@ fun ForgotPassword() {
         modifier = Modifier.clickable { }, text = "Forgot password?",
         fontSize = 12.sp,
         fontWeight = FontWeight.Bold,
-        color = Color(0xFF4EA8E9)
+        textDecoration = TextDecoration.Underline,
+        color = Geraldine
     )
 }
 

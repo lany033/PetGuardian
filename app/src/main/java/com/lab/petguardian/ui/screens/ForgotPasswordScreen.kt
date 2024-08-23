@@ -37,6 +37,6 @@ fun ForgotPasswordScreen() {
         }
         CommonTextFieldWithTextAbove(textAbove = "ADD AN E-MAIL ADDRESS", placeholderText = "E-mail address")
 
-        CommonButton(onClick = { /*TODO*/ }, text = "Send email", color = Color.Blue, modifier = Modifier)
+        CommonButton(onClick = { /*TODO*/ }, text = "Send email", modifier = Modifier)
     }
 }

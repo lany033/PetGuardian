@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="AppTheme" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:splitMotionEvents">false</item>
         <item name="android:windowEnableSplitTouch">false</item>
         <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
@@ -9,9 +9,9 @@
         <item name="android:windowBackground">@color/black</item>
     </style>
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
-    <item name="windowSplashScreenBackground">@color/east_side</item>
-    <item name="windowSplashScreenAnimatedIcon">@drawable/pet_logo_image</item>
-    <item name="windowSplashScreenAnimationDuration">3000</item>
+    <item name="windowSplashScreenBackground">@color/cruise</item>
+    <item name="windowSplashScreenAnimatedIcon">@drawable/pet_logo_name_xs</item>
+    <item name="windowSplashScreenAnimationDuration">5000</item>
     <item name="postSplashScreenTheme">@style/AppTheme</item>
     <item name="windowActionBar">false</item>
     <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>

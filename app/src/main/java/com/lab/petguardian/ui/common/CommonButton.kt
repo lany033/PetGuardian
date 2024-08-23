@@ -12,16 +12,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun CommonButton(onClick: () -> Unit, text: String, color: Color, modifier: Modifier? = null) {
+fun CommonButton(onClick: () -> Unit, text: String, modifier: Modifier? = null) {
     Button(
         modifier = modifier?.fillMaxWidth() ?: Modifier,
         onClick = { onClick() },
         shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = color)
     ) {
         Row(
             modifier = Modifier
@@ -30,7 +30,7 @@ fun CommonButton(onClick: () -> Unit, text: String, color: Color, modifier: Modi
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            Text(text = text, fontSize = 15.sp)
+            Text(text = text, fontSize = 15.sp, fontWeight = FontWeight.Bold)
         }
     }
 }

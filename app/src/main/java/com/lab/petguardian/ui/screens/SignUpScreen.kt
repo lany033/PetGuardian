@@ -53,7 +53,7 @@ fun SignUpScreen() {
         }
         CommonTextFieldWithTextAbove(textAbove = "ADD AN E-MAIL ADDRESS", placeholderText = "E-mail address")
         CommonTextFieldWithTextAbove(textAbove = "CREATE PASSWORD", placeholderText = "Password")
-        CommonButton(onClick = { /*TODO*/ }, text = "Sign Up", color = Color.Blue)
+        CommonButton(onClick = { /*TODO*/ }, text = "Sign Up")
     }
 }
 
