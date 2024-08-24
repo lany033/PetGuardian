@@ -59,7 +59,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-        implementation(libs.material)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -72,5 +71,13 @@ dependencies {
     implementation ("io.coil-kt:coil-compose:2.0.0")
 
     implementation("androidx.core:core-splashscreen:1.0.1")
+
+    //Navigation
+    implementation(libs.androidx.navigation.compose)
+
+    //icons
+    implementation(libs.androidx.material.icons.extended)
+
+    implementation ("io.coil-kt:coil-compose:2.4.0")
 
 }
