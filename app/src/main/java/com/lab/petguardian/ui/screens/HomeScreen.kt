@@ -51,12 +51,9 @@ import com.lab.petguardian.ui.common.CommonButton
 fun HomeScreen() {
     val navController = rememberNavController()
     Scaffold(bottomBar = { PetBottomBar(navController = navController) }) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(paddingValues).fillMaxSize()
-        ) {
-            item {
-                Row(
+
+        Column(modifier = Modifier.padding(paddingValues)) {
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 30.dp, horizontal = 20.dp),
@@ -71,63 +68,65 @@ fun HomeScreen() {
                     Text(text = "Melanie Mantilla", fontSize = 30.sp, fontWeight = FontWeight.Bold)
                 }
                 Image(
-                    painter = painterResource(R.drawable.pet_logo_image),
+                    painter = painterResource(R.mipmap.cat_love_dog),
                     contentDescription = "Foto de perfil por defecto",
                     modifier = Modifier
                         .padding(end = 8.dp)
-                        .size(40.dp)
+                        .size(50.dp)
                         .clip(CircleShape)
                 )
-            } }
-
-            item {
-                Card(
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-                    border = CardDefaults.outlinedCardBorder(),
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.padding(10.dp),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
+            }
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                item {
+                    Card(
+                        shape = RoundedCornerShape(20.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                        border = CardDefaults.outlinedCardBorder(),
+                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)
                     ) {
-                        Icon(imageVector = Icons.Default.Add, contentDescription = "plus")
-                        Text(text = "Add pet", fontWeight = FontWeight.Bold)
+                        Row(
+                            modifier = Modifier.padding(10.dp),
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(imageVector = Icons.Default.Add, contentDescription = "plus")
+                            Text(text = "Add pet", fontWeight = FontWeight.Bold)
+                        }
                     }
-                }
 
-                LazyRow(
-                    contentPadding = PaddingValues(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    item {
-                        PetItem()
-                        PetItem()
-                        PetItem()
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        item {
+                            PetItem()
+                            PetItem()
+                            PetItem()
+                        }
                     }
-                }
 
-                Card(
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.Transparent)
-                ) {
-                    Text(
-                        text = "Next Plans",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
-                    )
-                    Divider(modifier = Modifier.padding(vertical = 10.dp))
-                    LazyColumn(modifier = Modifier.height(400.dp)) {
-                        items(3) {
-                            PlanItem()
+                    Card(
+                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+                    ) {
+                        Text(
+                            text = "Next Plans",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp
+                        )
+                        Divider(modifier = Modifier.padding(vertical = 10.dp))
+                        LazyColumn(modifier = Modifier.height(250.dp)) {
+                            items(6) {
+                                PlanItem()
+                            }
                         }
                     }
                 }
+
             }
-
         }
-
     }
 }
 
@@ -139,7 +138,8 @@ fun PetItem() {
             .width(130.dp)
             .padding(horizontal = 5.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(30.dp)
+        shape = RoundedCornerShape(30.dp),
+        elevation = CardDefaults.cardElevation(5.dp)
     ) {
         Column {
             Image(
@@ -147,14 +147,14 @@ fun PetItem() {
                 contentDescription = "Foto de perfil por defecto",
             )
             Column(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Card(
                     colors = CardDefaults.cardColors(containerColor = Color.Transparent),
                     shape = RectangleShape
                 ) {
-                    Text(text = "2 years old")
+                    Text(text = "2 years old", fontSize = 10.sp)
                     Text(text = "Michina", fontWeight = FontWeight.Bold)
                 }
                 CommonButtonItem(onClick = { /*TODO*/ }, text = "View")

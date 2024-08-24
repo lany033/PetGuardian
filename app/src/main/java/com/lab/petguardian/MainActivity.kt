@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.lab.petguardian.ui.screens.HomeScreen
 import com.lab.petguardian.ui.screens.LoginScreen
+import com.lab.petguardian.ui.screens.PetDetailScreen
 import com.lab.petguardian.ui.theme.PetGuardianTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,7 +19,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             PetGuardianTheme {
                 //LoginScreen()
-                HomeScreen()
+                //HomeScreen()
+                PetDetailScreen()
             }
         }
     }
