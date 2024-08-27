@@ -18,6 +18,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -38,23 +39,26 @@ import com.lab.petguardian.ui.theme.PetGuardianTheme
 
 @Composable
 fun SignUpScreen() {
-    Column(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxSize(), verticalArrangement = Arrangement.spacedBy(32.dp)
-    ) {
-        CommonBackButton(onClickBackButton = {})
-        Card(
-            colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-            shape = RectangleShape
+    Scaffold {it ->
+        Column(
+            modifier = Modifier.padding(it)
+                .padding(16.dp)
+                .fillMaxSize(), verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
-            Text(text = "Create Account", fontSize = 25.sp, fontWeight = FontWeight.Bold)
-            Text(text = "Register with your E-mail address")
+            CommonBackButton(onClickBackButton = {})
+            Card(
+                colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                shape = RectangleShape
+            ) {
+                Text(text = "Create Account", fontSize = 25.sp, fontWeight = FontWeight.Bold)
+                Text(text = "Register with your E-mail address")
+            }
+            CommonTextFieldWithTextAbove(textAbove = "ADD AN E-MAIL ADDRESS", placeholderText = "E-mail address")
+            CommonTextFieldWithTextAbove(textAbove = "CREATE PASSWORD", placeholderText = "Password")
+            CommonButton(onClick = { /*TODO*/ }, text = "Sign Up")
         }
-        CommonTextFieldWithTextAbove(textAbove = "ADD AN E-MAIL ADDRESS", placeholderText = "E-mail address")
-        CommonTextFieldWithTextAbove(textAbove = "CREATE PASSWORD", placeholderText = "Password")
-        CommonButton(onClick = { /*TODO*/ }, text = "Sign Up")
     }
+
 }
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)

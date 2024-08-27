@@ -19,8 +19,8 @@ import com.lab.petguardian.ui.navigation.BottomBarNavItem
 fun PetBottomBar(navController: NavHostController){
     val items = listOf(
         BottomBarNavItem.Home,
-        BottomBarNavItem.Workouts,
-        BottomBarNavItem.Profile
+        BottomBarNavItem.Plans,
+        BottomBarNavItem.Settings
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination

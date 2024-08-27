@@ -43,6 +43,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -52,11 +53,13 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.lab.petguardian.R
 import com.lab.petguardian.model.presentation.Presentation
 import com.lab.petguardian.ui.common.CommonButton
 import com.lab.petguardian.ui.common.CommonTextFieldWithTextAbove
+import com.lab.petguardian.ui.navigation.AuthenticationGraph
 import com.lab.petguardian.ui.theme.Geraldine
 import com.lab.petguardian.ui.theme.PalePrim
 import com.lab.petguardian.ui.theme.PetGuardianTheme
@@ -64,19 +67,30 @@ import com.lab.petguardian.ui.theme.SaffronMango
 
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    onClickSignUp: () -> Unit,
+    onClickForgotPassword: () -> Unit,
+    onClickHome: () -> Unit
+) {
 
     var showBottomSheet by remember { mutableStateOf(false) }
 
     if (showBottomSheet) {
-        LoginBottomSheet(onDismiss = { showBottomSheet = false })
+        LoginBottomSheet(
+            onDismiss = { showBottomSheet = false },
+            onClickSignUp = { onClickSignUp() },
+            onClickForgotPassword = { onClickForgotPassword()},
+            onClickHome = { onClickHome() }
+        )
     }
     Scaffold(
         contentWindowInsets = WindowInsets.safeDrawing
     ) { innerppading ->
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(innerppading)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerppading)
+        ) {
             HorizontalPagerHomeScreen(Modifier.align(Alignment.Center))
             CommonButton(
                 onClick = { showBottomSheet = true },
@@ -85,7 +99,8 @@ fun LoginScreen() {
                     .align(
                         Alignment.BottomCenter
                     )
-                    .padding(horizontal = 16.dp).padding(bottom = 16.dp)
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 16.dp)
             )
         }
     }
@@ -197,7 +212,12 @@ fun CarrouselItem(image: Int, title: String, description: String) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginBottomSheet(onDismiss: () -> Unit) {
+fun LoginBottomSheet(
+    onDismiss: () -> Unit,
+    onClickSignUp: () -> Unit,
+    onClickForgotPassword: () -> Unit,
+    onClickHome: () -> Unit
+) {
 
     val modalBottomSheetState = rememberModalBottomSheetState()
 
@@ -205,7 +225,10 @@ fun LoginBottomSheet(onDismiss: () -> Unit) {
         onDismissRequest = { onDismiss() },
         sheetState = modalBottomSheetState,
         dragHandle = { DragHandleCustom() }) {
-        PetGuardianLogin()
+        PetGuardianLogin(
+            onClickSignUp = { onClickSignUp() },
+            onClickForgotPassword = { onClickForgotPassword() },
+            onClickHome = { onClickHome() })
     }
 }
 
@@ -243,18 +266,18 @@ fun DragHandleCustom() {
     }
 
 }
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+
 @Composable
-fun PetGuardianLogin() {
+fun PetGuardianLogin(onClickSignUp: () -> Unit, onClickForgotPassword: () -> Unit, onClickHome: () -> Unit) {
     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
         CommonTextFieldWithTextAbove(
             textAbove = "E-MAIL ADDRESS",
             placeholderText = "E-mail address"
         )
-        CommonButton(onClick = { /*TODO*/ }, text = "Continue", modifier = Modifier)
-        ForgotPassword()
-        SignUp()
+        CommonButton(onClick = { onClickHome() }, text = "Continue", modifier = Modifier)
+        ForgotPassword(onClickForgotPassword = { onClickForgotPassword() })
+        SignUp(onClickSignUp = { onClickSignUp() })
         LoginDivider()
         LoginSocialButton(
             onClick = { /*TODO*/ },
@@ -320,12 +343,12 @@ fun LoginDivider() {
 }
 
 @Composable
-fun SignUp() {
+fun SignUp(onClickSignUp: () -> Unit) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         Text(text = "Don't have an account?", fontSize = 12.sp, color = SaffronMango)
         Spacer(modifier = Modifier.size(5.dp))
         Text(
-            modifier = Modifier.clickable { }, text = "Sign up.",
+            modifier = Modifier.clickable { onClickSignUp() }, text = "Sign up.",
             fontSize = 12.sp,
             textDecoration = TextDecoration.Underline,
             fontWeight = FontWeight.Bold,
@@ -336,9 +359,9 @@ fun SignUp() {
 }
 
 @Composable
-fun ForgotPassword() {
+fun ForgotPassword(onClickForgotPassword: () -> Unit) {
     Text(
-        modifier = Modifier.clickable { }, text = "Forgot password?",
+        modifier = Modifier.clickable { onClickForgotPassword() }, text = "Forgot password?",
         fontSize = 12.sp,
         fontWeight = FontWeight.Bold,
         textDecoration = TextDecoration.Underline,
@@ -346,6 +369,8 @@ fun ForgotPassword() {
     )
 }
 
+
+/*
 @Preview
 @Composable
 fun LoginScreenPreview(){
@@ -353,3 +378,11 @@ fun LoginScreenPreview(){
         LoginScreen()
     }
 }
+
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun LoginScreenPreviewNight(){
+    PetGuardianTheme {
+        LoginScreen()
+    }
+}*/

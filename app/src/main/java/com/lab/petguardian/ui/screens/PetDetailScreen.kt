@@ -1,5 +1,6 @@
 package com.lab.petguardian.ui.screens
 
+import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -180,7 +181,7 @@ fun PetFeatureItem(featureName: String, featureValue: String, icon: ImageVector)
 }
 
 
-@Preview(showSystemUi = true)
+@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun PetDetailScreenPreview() {
     PetGuardianTheme {

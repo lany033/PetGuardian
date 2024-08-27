@@ -13,6 +13,6 @@ sealed class BottomBarNavItem(
     var route: String
 ) {
     object Home : BottomBarNavItem("Home", Icons.Default.Home, "Home")
-    object Workouts : BottomBarNavItem("Pet?", Icons.Default.Pets, "Pet?")
-    object Profile : BottomBarNavItem("Settings", Icons.Default.Settings, "Settings")
+    object Plans : BottomBarNavItem("Plans", Icons.Default.Pets, "Plans")
+    object Settings : BottomBarNavItem("Settings", Icons.Default.Settings, "Settings")
 }

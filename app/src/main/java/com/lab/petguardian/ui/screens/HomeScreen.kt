@@ -1,6 +1,8 @@
 package com.lab.petguardian.ui.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,6 +29,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.focusModifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
@@ -46,11 +50,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.lab.petguardian.R
 import com.lab.petguardian.ui.common.CommonButton
+import com.lab.petguardian.ui.theme.Geraldine
+import com.lab.petguardian.ui.theme.PetGuardianTheme
+import com.lab.petguardian.ui.theme.SaffronMango
 
 @Composable
 fun HomeScreen() {
-    val navController = rememberNavController()
-    Scaffold(bottomBar = { PetBottomBar(navController = navController) }) { paddingValues ->
+
+    Scaffold() { paddingValues ->
 
         Column(modifier = Modifier.padding(paddingValues)) {
             Row(
@@ -62,19 +69,25 @@ fun HomeScreen() {
             ) {
                 Card(
                     shape = RectangleShape,
-                    colors = CardDefaults.cardColors(containerColor = Color.Transparent)
-                ) {
+                    colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+
+                    ) {
                     Text(text = "Welcome back")
                     Text(text = "Melanie Mantilla", fontSize = 30.sp, fontWeight = FontWeight.Bold)
                 }
-                Image(
-                    painter = painterResource(R.mipmap.cat_love_dog),
-                    contentDescription = "Foto de perfil por defecto",
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .size(50.dp)
-                        .clip(CircleShape)
-                )
+                Card(
+                    modifier = Modifier.size(54.dp),
+                    shape = CircleShape,
+                    colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                    elevation = CardDefaults.cardElevation(5.dp)
+                ) {
+                    Image(
+                        painter = painterResource(R.mipmap.cat_love_dog),
+                        contentDescription = "Foto de perfil por defecto",
+                        contentScale = ContentScale.Crop
+                    )
+                }
+
             }
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
@@ -215,8 +228,18 @@ fun PlanItem() {
     }
 }
 
-@Preview
+@Preview(showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    PetGuardianTheme {
+        HomeScreen()
+    }
+}
+
+@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun HomeScreenPreviewNight() {
+    PetGuardianTheme {
+        HomeScreen()
+    }
 }
