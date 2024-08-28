@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -57,13 +58,12 @@ import com.lab.petguardian.ui.theme.SaffronMango
 @Composable
 fun HomeScreen() {
 
-    Scaffold() { paddingValues ->
-
-        Column(modifier = Modifier.padding(paddingValues)) {
+    Scaffold { padding ->
+        Column(modifier = Modifier.fillMaxSize().padding(top = padding.calculateBottomPadding())) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 30.dp, horizontal = 20.dp),
+                    .padding(vertical = 5.dp, horizontal = 20.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -90,7 +90,8 @@ fun HomeScreen() {
 
             }
             LazyColumn(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 item {
                     Card(
@@ -110,8 +111,9 @@ fun HomeScreen() {
                     }
 
                     LazyRow(
-                        contentPadding = PaddingValues(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+                        contentPadding = PaddingValues(horizontal = 16.dp)
                     ) {
                         item {
                             PetItem()
@@ -121,7 +123,7 @@ fun HomeScreen() {
                     }
 
                     Card(
-                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(top = 16.dp),
                         colors = CardDefaults.cardColors(containerColor = Color.Transparent)
                     ) {
                         Text(
@@ -130,7 +132,7 @@ fun HomeScreen() {
                             fontSize = 20.sp
                         )
                         Divider(modifier = Modifier.padding(vertical = 10.dp))
-                        LazyColumn(modifier = Modifier.height(250.dp)) {
+                        LazyColumn(modifier = Modifier.height(300.dp)) {
                             items(6) {
                                 PlanItem()
                             }

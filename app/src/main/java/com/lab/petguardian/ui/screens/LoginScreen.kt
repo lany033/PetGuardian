@@ -269,11 +269,22 @@ fun DragHandleCustom() {
 
 @Composable
 fun PetGuardianLogin(onClickSignUp: () -> Unit, onClickForgotPassword: () -> Unit, onClickHome: () -> Unit) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
         CommonTextFieldWithTextAbove(
             textAbove = "E-MAIL ADDRESS",
-            placeholderText = "E-mail address"
+            placeholderText = "E-mail address",
+            value = email,
+            onValueChange = { email = it }
+        )
+        CommonTextFieldWithTextAbove(
+            textAbove = "PASSWORD",
+            placeholderText = "Password",
+            value = password,
+            onValueChange = { password = it }
         )
         CommonButton(onClick = { onClickHome() }, text = "Continue", modifier = Modifier)
         ForgotPassword(onClickForgotPassword = { onClickForgotPassword() })

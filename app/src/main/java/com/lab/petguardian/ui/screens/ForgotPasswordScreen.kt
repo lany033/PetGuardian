@@ -9,6 +9,10 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -23,6 +27,7 @@ import com.lab.petguardian.ui.common.CommonTextFieldWithTextAbove
 @Preview
 @Composable
 fun ForgotPasswordScreen() {
+    var email by remember { mutableStateOf("") }
     Scaffold { it ->
         Column(
             modifier = Modifier.padding(it)
@@ -37,7 +42,7 @@ fun ForgotPasswordScreen() {
                 Text(text = "Reset Password", fontSize = 25.sp, fontWeight = FontWeight.Bold)
                 Text(text = "Enter the email associate with your account and we'll send an email with instructions to reset your password")
             }
-            CommonTextFieldWithTextAbove(textAbove = "ADD AN E-MAIL ADDRESS", placeholderText = "E-mail address")
+            CommonTextFieldWithTextAbove(textAbove = "ADD AN E-MAIL ADDRESS", placeholderText = "E-mail address", value = email, onValueChange = {email = it})
 
             CommonButton(onClick = { /*TODO*/ }, text = "Send email", modifier = Modifier)
         }

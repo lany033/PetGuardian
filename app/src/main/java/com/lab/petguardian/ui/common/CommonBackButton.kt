@@ -13,21 +13,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.lab.petguardian.R
 
 @Composable
 fun CommonBackButton(modifier: Modifier? = null, onClickBackButton: () -> Unit){
     Row(modifier = modifier?.fillMaxWidth() ?: Modifier, verticalAlignment = Alignment.CenterVertically) {
         IconButton(onClick = { onClickBackButton() }) {
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                tint = Color.White,
+                painter = painterResource(id = R.drawable.arrow_back),
                 contentDescription = "back",
                 modifier = Modifier.size(30.dp)
             )
         }
-        Text(text = "Back", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+        Text(text = "Back", fontWeight = FontWeight.Bold, fontSize = 15.sp)
     }
 }
