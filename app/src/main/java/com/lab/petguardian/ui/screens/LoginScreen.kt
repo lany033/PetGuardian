@@ -1,6 +1,8 @@
 package com.lab.petguardian.ui.screens
 
+import android.content.Context
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -40,12 +42,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -53,9 +57,12 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.lab.petguardian.R
+import com.lab.petguardian.data.AuthManager
+import com.lab.petguardian.data.AuthRes
 import com.lab.petguardian.model.presentation.Presentation
 import com.lab.petguardian.ui.common.CommonButton
 import com.lab.petguardian.ui.common.CommonTextFieldWithTextAbove
@@ -64,23 +71,29 @@ import com.lab.petguardian.ui.theme.Geraldine
 import com.lab.petguardian.ui.theme.PalePrim
 import com.lab.petguardian.ui.theme.PetGuardianTheme
 import com.lab.petguardian.ui.theme.SaffronMango
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun LoginScreen(
     onClickSignUp: () -> Unit,
     onClickForgotPassword: () -> Unit,
-    onClickHome: () -> Unit
+    onClickHome: () -> Unit,
+    authManager: AuthManager,
 ) {
 
     var showBottomSheet by remember { mutableStateOf(false) }
+
+    var context = LocalContext.current
 
     if (showBottomSheet) {
         LoginBottomSheet(
             onDismiss = { showBottomSheet = false },
             onClickSignUp = { onClickSignUp() },
-            onClickForgotPassword = { onClickForgotPassword()},
-            onClickHome = { onClickHome() }
+            onClickForgotPassword = { onClickForgotPassword() },
+            onClickHome = { onClickHome() },
+            authManager = authManager,
+            context = context
         )
     }
     Scaffold(
@@ -216,7 +229,9 @@ fun LoginBottomSheet(
     onDismiss: () -> Unit,
     onClickSignUp: () -> Unit,
     onClickForgotPassword: () -> Unit,
-    onClickHome: () -> Unit
+    onClickHome: () -> Unit,
+    authManager: AuthManager,
+    context: Context
 ) {
 
     val modalBottomSheetState = rememberModalBottomSheetState()
@@ -228,7 +243,10 @@ fun LoginBottomSheet(
         PetGuardianLogin(
             onClickSignUp = { onClickSignUp() },
             onClickForgotPassword = { onClickForgotPassword() },
-            onClickHome = { onClickHome() })
+            onClickHome = { onClickHome() },
+            authManager = authManager,
+            context = context
+        )
     }
 }
 
@@ -268,10 +286,16 @@ fun DragHandleCustom() {
 }
 
 @Composable
-fun PetGuardianLogin(onClickSignUp: () -> Unit, onClickForgotPassword: () -> Unit, onClickHome: () -> Unit) {
+fun PetGuardianLogin(
+    onClickSignUp: () -> Unit,
+    onClickForgotPassword: () -> Unit,
+    onClickHome: () -> Unit,
+    authManager: AuthManager,
+    context: Context
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
+    var scope = rememberCoroutineScope()
     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
         CommonTextFieldWithTextAbove(
@@ -286,7 +310,16 @@ fun PetGuardianLogin(onClickSignUp: () -> Unit, onClickForgotPassword: () -> Uni
             value = password,
             onValueChange = { password = it }
         )
-        CommonButton(onClick = { onClickHome() }, text = "Continue", modifier = Modifier)
+        CommonButton(onClick = {
+            scope.launch {
+                emailPassSignIn(
+                    email = email,
+                    password = password,
+                    authManager = authManager,
+                    context = context,
+                    onClickSignUp = { onClickHome() })
+            }
+        }, text = "Continue", modifier = Modifier)
         ForgotPassword(onClickForgotPassword = { onClickForgotPassword() })
         SignUp(onClickSignUp = { onClickSignUp() })
         LoginDivider()
@@ -296,6 +329,29 @@ fun PetGuardianLogin(onClickSignUp: () -> Unit, onClickForgotPassword: () -> Uni
             icon = R.drawable.ic_google
         )
         Spacer(modifier = Modifier.height(16.dp))
+    }
+}
+
+private suspend fun emailPassSignIn(
+    email: String,
+    password: String,
+    authManager: AuthManager,
+    context: Context,
+    onClickSignUp: () -> Unit
+) {
+    if (email.isNotEmpty() && password.isNotEmpty()) {
+        when (val result = authManager.signInWithEmailAndPassword(email, password)) {
+            is AuthRes.Success -> {
+                onClickSignUp()
+            }
+
+            is AuthRes.Error -> {
+                Toast.makeText(context, "Error SignUp: ${result.errorMessage}", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    } else {
+        Toast.makeText(context, "Existen campos vacios", Toast.LENGTH_SHORT).show()
     }
 }
 

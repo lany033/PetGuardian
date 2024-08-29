@@ -27,4 +27,13 @@ class AuthManager(context: Context) {
         }
     }
 
+    suspend fun signInWithEmailAndPassword(email: String, password: String): AuthRes<FirebaseUser?> {
+        return try {
+            val authResult = auth.signInWithEmailAndPassword(email, password).await()
+            AuthRes.Success(authResult.user)
+        } catch (e: Exception) {
+            AuthRes.Error(e.message ?: "Error al iniciar sesion")
+        }
+    }
+
 }

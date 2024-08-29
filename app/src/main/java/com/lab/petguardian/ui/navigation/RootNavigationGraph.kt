@@ -40,7 +40,8 @@ fun NavGraphBuilder.authNavGraph(
             LoginScreen(
                 onClickSignUp = { navController.navigate(AuthenticationGraph.SIGN_UP) },
                 onClickForgotPassword = { navController.navigate(AuthenticationGraph.FORGOT_PASSWORD) },
-                onClickHome = { navController.navigate(Graph.HOME) }
+                onClickHome = { navController.navigate(Graph.HOME) },
+                authManager = authManager
             )
         }
         composable(AuthenticationGraph.SIGN_UP) {
