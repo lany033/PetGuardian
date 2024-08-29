@@ -36,4 +36,15 @@ class AuthManager(context: Context) {
         }
     }
 
+    fun getCurrentUser(): FirebaseUser? {
+        return auth.currentUser
+
+    }
+
+    fun signOut() {
+        auth.signOut()
+        signInClient.signOut()
+
+    }
+
 }

@@ -1,10 +1,12 @@
 package com.lab.petguardian.ui.screens
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -23,7 +25,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -33,7 +39,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,19 +58,56 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.lab.petguardian.R
+import com.lab.petguardian.data.AuthManager
 import com.lab.petguardian.ui.common.CommonButton
+import com.lab.petguardian.ui.navigation.Graph
 import com.lab.petguardian.ui.theme.Geraldine
 import com.lab.petguardian.ui.theme.PetGuardianTheme
 import com.lab.petguardian.ui.theme.SaffronMango
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(authManager: AuthManager, navigation: NavController) {
+
+    var user = authManager.getCurrentUser()
+
+    var showDialog by remember { mutableStateOf(false) }
+
+    fun onclickLogout() {
+        showDialog = true
+    }
+
+    var onLogoutConfirmed: () -> Unit = {
+        authManager.signOut()
+        navigation.navigate(Graph.AUTHENTICATION) {
+            popUpTo(Graph.AUTHENTICATION) {
+                inclusive = true
+            }
+        }
+        val currentUser = authManager.getCurrentUser()
+        if (currentUser == null) {
+            // El usuario no está logueado
+            Log.d("AuthCheck", "No user logged in")
+        } else {
+            // El usuario está logueado
+            Log.d("AuthCheck", "User logged in: ${currentUser.uid}")
+        }
+    }
 
     Scaffold { padding ->
-        Column(modifier = Modifier.fillMaxSize().padding(top = padding.calculateBottomPadding())) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = padding.calculateBottomPadding())
+        ) {
+            Box {
+                if (showDialog){
+                    LogoutDialog(onConfirmLogout = { onLogoutConfirmed() }, onDismiss = { showDialog = false }, onClickProfile = { /*TODO*/ })
+                }
+            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -70,14 +118,15 @@ fun HomeScreen() {
                 Card(
                     shape = RectangleShape,
                     colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-
-                    ) {
+                ) {
                     Text(text = "Welcome back")
                     Text(text = "Melanie Mantilla", fontSize = 30.sp, fontWeight = FontWeight.Bold)
                 }
                 Card(
-                    modifier = Modifier.size(54.dp),
-                    shape = CircleShape,
+                    modifier = Modifier
+                        .size(54.dp)
+                        .clip(CircleShape)
+                        .clickable { onclickLogout() },
                     colors = CardDefaults.cardColors(containerColor = Color.Transparent),
                     elevation = CardDefaults.cardElevation(5.dp)
                 ) {
@@ -123,7 +172,10 @@ fun HomeScreen() {
                     }
 
                     Card(
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(top = 16.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .padding(top = 16.dp),
                         colors = CardDefaults.cardColors(containerColor = Color.Transparent)
                     ) {
                         Text(
@@ -145,7 +197,33 @@ fun HomeScreen() {
     }
 }
 
-@Preview
+
+@Composable
+fun LogoutDialog(
+    onConfirmLogout: () -> Unit,
+    onDismiss: () -> Unit,
+    onClickProfile: () -> Unit
+) {
+    Dialog(
+        onDismissRequest = { onDismiss() }
+    ) {
+        Column(modifier = Modifier.padding(5.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            TextButton(onClick = { onClickProfile() }) {
+                Icon(imageVector = Icons.Filled.AccountCircle, contentDescription = "account")
+                Spacer(modifier = Modifier.width(5.dp))
+                Text(text = "My Profile")
+            }
+            Divider()
+            TextButton(onClick = { onConfirmLogout() }) {
+                Icon(imageVector = Icons.AutoMirrored.Filled.Logout, contentDescription = "logout")
+                Spacer(modifier = Modifier.width(5.dp))
+                Text(text = "Logout")
+            }
+        }
+    }
+}
+
+
 @Composable
 fun PetItem() {
     Card(
@@ -230,6 +308,8 @@ fun PlanItem() {
     }
 }
 
+/*
+
 @Preview(showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {
@@ -244,4 +324,4 @@ fun HomeScreenPreviewNight() {
     PetGuardianTheme {
         HomeScreen()
     }
-}
+}*/

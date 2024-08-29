@@ -8,9 +8,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.lab.petguardian.ui.navigation.RootNavigationGraph
-import com.lab.petguardian.ui.screens.HomeScreen
-import com.lab.petguardian.ui.screens.LoginScreen
-import com.lab.petguardian.ui.screens.PetDetailScreen
 import com.lab.petguardian.ui.theme.PetGuardianTheme
 
 class MainActivity : ComponentActivity() {

@@ -6,14 +6,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.lab.petguardian.data.AuthManager
 import com.lab.petguardian.ui.navigation.BottomBarNavGraph
 
 @Composable
-fun MainScreen(){
+fun MainScreen(authManager: AuthManager){
     val navController = rememberNavController()
     Scaffold(bottomBar = { PetBottomBar(navController = navController)}) { it ->
         Column(Modifier.padding(it)) {
-            BottomBarNavGraph(navController = navController)
+            BottomBarNavGraph(navController = navController, authManager = authManager)
         }
 
     }
