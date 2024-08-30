@@ -92,8 +92,6 @@ fun WelcomeScreen(
         }
     }
 
-
-
     if (showBottomSheet) {
         CommonLoginBottomSheet(
             onDismiss = { showBottomSheet = false },

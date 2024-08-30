@@ -2,10 +2,12 @@ package com.lab.petguardian.ui.common
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -24,11 +26,11 @@ fun CommonBackButton(modifier: Modifier? = null, onClickBackButton: () -> Unit){
     Row(modifier = modifier?.fillMaxWidth() ?: Modifier, verticalAlignment = Alignment.CenterVertically) {
         IconButton(onClick = { onClickBackButton() }) {
             Icon(
-                painter = painterResource(id = R.drawable.arrow_back),
+                imageVector = Icons.Default.ArrowBackIosNew,
                 contentDescription = "back",
                 modifier = Modifier.size(30.dp)
             )
         }
-        Text(text = "Back", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+        Text(text = "Back", fontWeight = FontWeight.Bold, fontSize = 18.sp)
     }
 }

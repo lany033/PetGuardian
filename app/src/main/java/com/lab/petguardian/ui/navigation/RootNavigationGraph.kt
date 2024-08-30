@@ -24,7 +24,7 @@ fun RootNavigationGraph(context: Context, navController: NavHostController) {
         startDestination = Graph.AUTHENTICATION
     ) {
         authNavGraph(navController = navController, authManager = authManager)
-        composable(Graph.HOME) {
+        composable(Graph.MAIN) {
             MainScreen(
                 authManager = authManager,
                 rootNavController = navController
@@ -43,12 +43,12 @@ fun NavGraphBuilder.authNavGraph(
                 onClickSignUp = { navController.navigate(AuthenticationGraph.SIGN_UP) },
                 onClickForgotPassword = { navController.navigate(AuthenticationGraph.FORGOT_PASSWORD) },
                 onClickHome = {
-                    navController.navigate(Graph.HOME) {
+                    navController.navigate(Graph.MAIN) {
                         popUpTo(Graph.AUTHENTICATION)
                     }
                 },
                 onGoogleSignIn = {
-                    navController.navigate(Graph.HOME) {
+                    navController.navigate(Graph.MAIN) {
                         popUpTo(Graph.AUTHENTICATION)
                     }
                 },
@@ -70,5 +70,5 @@ fun NavGraphBuilder.authNavGraph(
 object Graph {
     const val ROOT = "root_graph"
     const val AUTHENTICATION = "auth_graph"
-    const val HOME = "home_graph"
+    const val MAIN = "main_graph"
 }
