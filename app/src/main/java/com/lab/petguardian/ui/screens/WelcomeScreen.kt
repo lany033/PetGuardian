@@ -1,7 +1,6 @@
 package com.lab.petguardian.ui.screens
 
 import android.content.Context
-import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -46,19 +45,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.lab.petguardian.R
 import com.lab.petguardian.data.AuthManager
@@ -66,16 +60,14 @@ import com.lab.petguardian.data.AuthRes
 import com.lab.petguardian.model.presentation.Presentation
 import com.lab.petguardian.ui.common.CommonButton
 import com.lab.petguardian.ui.common.CommonTextFieldWithTextAbove
-import com.lab.petguardian.ui.navigation.AuthenticationGraph
 import com.lab.petguardian.ui.theme.Geraldine
 import com.lab.petguardian.ui.theme.PalePrim
-import com.lab.petguardian.ui.theme.PetGuardianTheme
 import com.lab.petguardian.ui.theme.SaffronMango
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun LoginScreen(
+fun WelcomeScreen(
     onClickSignUp: () -> Unit,
     onClickForgotPassword: () -> Unit,
     onClickHome: () -> Unit,
@@ -296,6 +288,9 @@ fun PetGuardianLogin(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var scope = rememberCoroutineScope()
+
+
+
     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
         CommonTextFieldWithTextAbove(

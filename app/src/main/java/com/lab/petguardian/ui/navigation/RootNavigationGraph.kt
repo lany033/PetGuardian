@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.lab.petguardian.data.AuthManager
 import com.lab.petguardian.ui.screens.ForgotPasswordScreen
-import com.lab.petguardian.ui.screens.LoginScreen
+import com.lab.petguardian.ui.screens.WelcomeScreen
 import com.lab.petguardian.ui.screens.MainScreen
 import com.lab.petguardian.ui.screens.SignUpScreen
 
@@ -24,9 +24,7 @@ fun RootNavigationGraph(context: Context, navController: NavHostController) {
         startDestination = Graph.AUTHENTICATION
     ) {
         authNavGraph(navController = navController, authManager = authManager)
-        composable(Graph.HOME) {
-            MainScreen(authManager = authManager)
-        }
+        composable(Graph.HOME) { MainScreen(authManager = authManager, rootNavController = navController) }
     }
 }
 
@@ -36,7 +34,7 @@ fun NavGraphBuilder.authNavGraph(
 ) {
     navigation(route = Graph.AUTHENTICATION, startDestination = AuthenticationGraph.LOGIN) {
         composable(AuthenticationGraph.LOGIN) {
-            LoginScreen(
+            WelcomeScreen(
                 onClickSignUp = { navController.navigate(AuthenticationGraph.SIGN_UP) },
                 onClickForgotPassword = { navController.navigate(AuthenticationGraph.FORGOT_PASSWORD) },
                 onClickHome = { navController.navigate(Graph.HOME) },

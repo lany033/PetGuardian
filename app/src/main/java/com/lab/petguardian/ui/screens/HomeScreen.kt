@@ -1,9 +1,9 @@
 package com.lab.petguardian.ui.screens
 
-import android.content.res.Configuration
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,23 +19,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Logout
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -48,53 +41,41 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.focusModifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.lab.petguardian.R
 import com.lab.petguardian.data.AuthManager
-import com.lab.petguardian.ui.common.CommonButton
+import com.lab.petguardian.ui.navigation.AuthenticationGraph
 import com.lab.petguardian.ui.navigation.Graph
-import com.lab.petguardian.ui.theme.Geraldine
-import com.lab.petguardian.ui.theme.PetGuardianTheme
-import com.lab.petguardian.ui.theme.SaffronMango
 
 @Composable
-fun HomeScreen(authManager: AuthManager, navigation: NavController) {
+fun HomeScreen(authManager: AuthManager, onClickLogout: () -> Unit, navController: NavController) {
 
     var user = authManager.getCurrentUser()
 
+    val context = LocalContext.current
+
     var showDialog by remember { mutableStateOf(false) }
 
-    fun onclickLogout() {
+    fun onclickLogoutDialog() {
         showDialog = true
     }
 
     var onLogoutConfirmed: () -> Unit = {
-        authManager.signOut()
-        navigation.navigate(Graph.AUTHENTICATION) {
-            popUpTo(Graph.AUTHENTICATION) {
-                inclusive = true
-            }
+        val sharedPreferences = context.getSharedPreferences("user_prefers", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            clear()
+            apply()
         }
-        val currentUser = authManager.getCurrentUser()
-        if (currentUser == null) {
-            // El usuario no está logueado
-            Log.d("AuthCheck", "No user logged in")
-        } else {
-            // El usuario está logueado
-            Log.d("AuthCheck", "User logged in: ${currentUser.uid}")
-        }
+        onClickLogout()
     }
 
     Scaffold { padding ->
@@ -104,8 +85,11 @@ fun HomeScreen(authManager: AuthManager, navigation: NavController) {
                 .padding(top = padding.calculateBottomPadding())
         ) {
             Box {
-                if (showDialog){
-                    LogoutDialog(onConfirmLogout = { onLogoutConfirmed() }, onDismiss = { showDialog = false }, onClickProfile = { /*TODO*/ })
+                if (showDialog) {
+                    LogoutDialog(
+                        onConfirmLogout = { onLogoutConfirmed() },
+                        onDismiss = { showDialog = false },
+                        onClickProfile = { /*TODO*/ })
                 }
             }
             Row(
@@ -126,7 +110,7 @@ fun HomeScreen(authManager: AuthManager, navigation: NavController) {
                     modifier = Modifier
                         .size(54.dp)
                         .clip(CircleShape)
-                        .clickable { onclickLogout() },
+                        .clickable { onclickLogoutDialog() },
                     colors = CardDefaults.cardColors(containerColor = Color.Transparent),
                     elevation = CardDefaults.cardElevation(5.dp)
                 ) {
@@ -207,7 +191,10 @@ fun LogoutDialog(
     Dialog(
         onDismissRequest = { onDismiss() }
     ) {
-        Column(modifier = Modifier.padding(5.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.padding(5.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             TextButton(onClick = { onClickProfile() }) {
                 Icon(imageVector = Icons.Filled.AccountCircle, contentDescription = "account")
                 Spacer(modifier = Modifier.width(5.dp))
