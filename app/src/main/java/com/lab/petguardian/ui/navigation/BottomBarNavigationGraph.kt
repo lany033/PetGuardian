@@ -6,8 +6,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.lab.petguardian.data.AuthManager
 import com.lab.petguardian.ui.screens.HomeScreen
-import com.lab.petguardian.ui.screens.LoginScreen
-import com.lab.petguardian.ui.screens.MainScreen
 import com.lab.petguardian.ui.screens.PlansScreen
 import com.lab.petguardian.ui.screens.SettingsScreen
 
@@ -34,18 +32,7 @@ fun BottomBarNavGraph(
         }
         composable(route = BottomBarNavItem.Plans.route) { PlansScreen() }
         composable(route = BottomBarNavItem.Settings.route) { SettingsScreen() }
-
     }
 }
 
-/*
 
-fun NavGraphBuilder.bottomBarNavGraph(navController: NavController, authManager: AuthManager){
-    navigation(route = Graph.HOME, startDestination = BottomBarNavItem.Home.route){
-        composable(route = BottomBarNavItem.Home.route){ HomeScreen(authManager, navController) }
-        composable(route = BottomBarNavItem.Plans.route){ PlansScreen() }
-        composable(route = BottomBarNavItem.Settings.route){ SettingsScreen() }
-    }
-
-}
-*/

@@ -36,9 +36,17 @@ class AuthManager(context: Context) {
         }
     }
 
+    suspend fun resetPassword(email: String): AuthRes<Unit> {
+        return try {
+            auth.sendPasswordResetEmail(email).await()
+            AuthRes.Success(Unit)
+        } catch (e: Exception) {
+            AuthRes.Error(e.message ?: "Error al restablecer contraseña")
+        }
+    }
+
     fun getCurrentUser(): FirebaseUser? {
         return auth.currentUser
-
     }
 
     fun signOut() {

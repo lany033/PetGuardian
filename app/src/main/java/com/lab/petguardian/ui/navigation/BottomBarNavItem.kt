@@ -15,5 +15,5 @@ sealed class BottomBarNavItem(
     object Home : BottomBarNavItem("Home", Icons.Default.Home, "Home")
     object Plans : BottomBarNavItem("Plans", Icons.Default.Pets, "Plans")
     object Settings : BottomBarNavItem("Settings", Icons.Default.Settings, "Settings")
-    object Login: BottomBarNavItem("Login", Icons.Default.AccountCircle, "Login")
+
 }

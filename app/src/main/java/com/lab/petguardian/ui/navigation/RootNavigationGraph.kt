@@ -45,7 +45,7 @@ fun NavGraphBuilder.authNavGraph(
             SignUpScreen(navController, authManager)
         }
         composable(AuthenticationGraph.FORGOT_PASSWORD) {
-            ForgotPasswordScreen()
+            ForgotPasswordScreen(authManager, backLogin = {navController.navigate(Graph.AUTHENTICATION)})
         }
     }
 }

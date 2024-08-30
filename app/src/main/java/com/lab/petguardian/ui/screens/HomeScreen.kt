@@ -47,6 +47,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -69,7 +70,7 @@ fun HomeScreen(authManager: AuthManager, onClickLogout: () -> Unit, navControlle
         showDialog = true
     }
 
-    var onLogoutConfirmed: () -> Unit = {
+    val onLogoutConfirmed: () -> Unit = {
         val sharedPreferences = context.getSharedPreferences("user_prefers", Context.MODE_PRIVATE)
         with(sharedPreferences.edit()) {
             clear()
@@ -104,7 +105,7 @@ fun HomeScreen(authManager: AuthManager, onClickLogout: () -> Unit, navControlle
                     colors = CardDefaults.cardColors(containerColor = Color.Transparent),
                 ) {
                     Text(text = "Welcome back")
-                    Text(text = "Melanie Mantilla", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                    Text(text = user?.email ?: "Anonimo", fontSize = 25.sp, fontWeight = FontWeight.Bold)
                 }
                 Card(
                     modifier = Modifier
@@ -181,7 +182,6 @@ fun HomeScreen(authManager: AuthManager, onClickLogout: () -> Unit, navControlle
     }
 }
 
-
 @Composable
 fun LogoutDialog(
     onConfirmLogout: () -> Unit,
@@ -191,20 +191,22 @@ fun LogoutDialog(
     Dialog(
         onDismissRequest = { onDismiss() }
     ) {
-        Column(
-            modifier = Modifier.padding(5.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            TextButton(onClick = { onClickProfile() }) {
-                Icon(imageVector = Icons.Filled.AccountCircle, contentDescription = "account")
-                Spacer(modifier = Modifier.width(5.dp))
-                Text(text = "My Profile")
-            }
-            Divider()
-            TextButton(onClick = { onConfirmLogout() }) {
-                Icon(imageVector = Icons.AutoMirrored.Filled.Logout, contentDescription = "logout")
-                Spacer(modifier = Modifier.width(5.dp))
-                Text(text = "Logout")
+        Card {
+            Column(
+                modifier = Modifier.padding(5.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                TextButton(onClick = { onClickProfile() }) {
+                    Icon(imageVector = Icons.Filled.AccountCircle, contentDescription = "account")
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(text = "My Profile")
+                }
+                Divider()
+                TextButton(onClick = { onConfirmLogout() }) {
+                    Icon(imageVector = Icons.AutoMirrored.Filled.Logout, contentDescription = "logout")
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(text = "Logout")
+                }
             }
         }
     }
