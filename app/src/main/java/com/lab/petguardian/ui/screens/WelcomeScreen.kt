@@ -1,7 +1,10 @@
 package com.lab.petguardian.ui.screens
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -54,12 +57,17 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.firebase.auth.GoogleAuthProvider
 import com.lab.petguardian.R
 import com.lab.petguardian.data.AuthManager
 import com.lab.petguardian.data.AuthRes
 import com.lab.petguardian.model.presentation.Presentation
 import com.lab.petguardian.ui.common.CommonButton
+import com.lab.petguardian.ui.common.CommonForgotPasswordText
+import com.lab.petguardian.ui.common.CommonSignUpText
 import com.lab.petguardian.ui.common.CommonTextFieldWithTextAbove
+import com.lab.petguardian.ui.common.LoginDivider
 import com.lab.petguardian.ui.theme.Geraldine
 import com.lab.petguardian.ui.theme.PalePrim
 import com.lab.petguardian.ui.theme.SaffronMango
@@ -71,6 +79,7 @@ fun WelcomeScreen(
     onClickSignUp: () -> Unit,
     onClickForgotPassword: () -> Unit,
     onClickHome: () -> Unit,
+    onGoogleSignIn: () -> Unit,
     authManager: AuthManager,
 ) {
 
@@ -78,12 +87,37 @@ fun WelcomeScreen(
 
     var context = LocalContext.current
 
+    var scope = rememberCoroutineScope()
+
+    val googleSignInLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()){ result ->
+        when(val account = authManager.handleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(result.data))){
+            is AuthRes.Success -> {
+                val credential = GoogleAuthProvider.getCredential(account?.data?.idToken, null)
+                scope.launch {
+                    val fireUser = authManager.signInWithGoogleCredential(credential)
+                    if(fireUser != null){
+                        Toast.makeText(context, "Bienvenido", Toast.LENGTH_SHORT).show()
+                        onGoogleSignIn()
+                    }
+                }
+                Log.d("USER LOGIN","${authManager.getCurrentUser()}")
+            }
+            is AuthRes.Error -> {
+                Toast.makeText(context, "Error: ${account.errorMessage}", Toast.LENGTH_SHORT).show()
+            }
+            else -> {
+                Toast.makeText(context, "Error: Unknown", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     if (showBottomSheet) {
         LoginBottomSheet(
             onDismiss = { showBottomSheet = false },
             onClickSignUp = { onClickSignUp() },
             onClickForgotPassword = { onClickForgotPassword() },
             onClickHome = { onClickHome() },
+            onGoogleSignIn = { authManager.signInWithGoogle(googleSignInLauncher) },
             authManager = authManager,
             context = context
         )
@@ -222,6 +256,7 @@ fun LoginBottomSheet(
     onClickSignUp: () -> Unit,
     onClickForgotPassword: () -> Unit,
     onClickHome: () -> Unit,
+    onGoogleSignIn: () -> Unit,
     authManager: AuthManager,
     context: Context
 ) {
@@ -237,6 +272,7 @@ fun LoginBottomSheet(
             onClickForgotPassword = { onClickForgotPassword() },
             onClickHome = { onClickHome() },
             authManager = authManager,
+            onGoogleSignIn = { onGoogleSignIn() },
             context = context
         )
     }
@@ -282,14 +318,13 @@ fun PetGuardianLogin(
     onClickSignUp: () -> Unit,
     onClickForgotPassword: () -> Unit,
     onClickHome: () -> Unit,
+    onGoogleSignIn: () -> Unit,
     authManager: AuthManager,
     context: Context
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var scope = rememberCoroutineScope()
-
-
 
     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
@@ -315,11 +350,11 @@ fun PetGuardianLogin(
                     onClickSignUp = { onClickHome() })
             }
         }, text = "Continue", modifier = Modifier)
-        ForgotPassword(onClickForgotPassword = { onClickForgotPassword() })
-        SignUp(onClickSignUp = { onClickSignUp() })
+        CommonForgotPasswordText(onClickForgotPassword = { onClickForgotPassword() })
+        CommonSignUpText(onClickSignUp = { onClickSignUp() })
         LoginDivider()
         LoginSocialButton(
-            onClick = { /*TODO*/ },
+            onClick = { onGoogleSignIn() },
             text = "Continue with Google",
             icon = R.drawable.ic_google
         )
@@ -376,59 +411,6 @@ fun LoginSocialButton(onClick: () -> Unit, text: String, icon: Int) {
             Text(text = text, fontSize = 15.sp, color = Geraldine, fontWeight = FontWeight.Bold)
         }
     }
-}
-
-
-@Composable
-fun LoginDivider() {
-    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        Divider(
-            Modifier
-                .height(1.dp)
-                .weight(1f),
-            color = Geraldine
-        )
-        Text(
-            text = "OR",
-            modifier = Modifier.padding(horizontal = 20.dp),
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Bold,
-            color = Geraldine
-        )
-        Divider(
-            Modifier
-                .height(1.dp)
-                .weight(1f),
-            color = Geraldine
-        )
-    }
-}
-
-@Composable
-fun SignUp(onClickSignUp: () -> Unit) {
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        Text(text = "Don't have an account?", fontSize = 12.sp, color = SaffronMango)
-        Spacer(modifier = Modifier.size(5.dp))
-        Text(
-            modifier = Modifier.clickable { onClickSignUp() }, text = "Sign up.",
-            fontSize = 12.sp,
-            textDecoration = TextDecoration.Underline,
-            fontWeight = FontWeight.Bold,
-            color = Geraldine
-        )
-
-    }
-}
-
-@Composable
-fun ForgotPassword(onClickForgotPassword: () -> Unit) {
-    Text(
-        modifier = Modifier.clickable { onClickForgotPassword() }, text = "Forgot password?",
-        fontSize = 12.sp,
-        fontWeight = FontWeight.Bold,
-        textDecoration = TextDecoration.Underline,
-        color = Geraldine
-    )
 }
 
 
