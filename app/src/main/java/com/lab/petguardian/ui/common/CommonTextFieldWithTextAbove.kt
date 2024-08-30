@@ -20,10 +20,24 @@ import androidx.compose.ui.unit.sp
 import com.lab.petguardian.ui.theme.Geraldine
 
 @Composable
-fun CommonTextFieldWithTextAbove(keyboardOptions: KeyboardOptions? = null,textAbove: String, placeholderText:String, value: String, onValueChange: (String) -> Unit){
-
-    Card(colors = CardDefaults.cardColors(containerColor = Color.Transparent), shape = RectangleShape) {
-        Text(modifier = Modifier.padding(start = 2.dp, bottom = 6.dp), text = textAbove, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Geraldine)
+fun CommonTextFieldWithTextAbove(
+    keyboardOptions: KeyboardOptions? = null,
+    textAbove: String,
+    placeholderText: String,
+    value: String,
+    onValueChange: (String) -> Unit
+) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        shape = RectangleShape
+    ) {
+        Text(
+            modifier = Modifier.padding(start = 2.dp, bottom = 6.dp),
+            text = textAbove,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold,
+            color = Geraldine
+        )
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
