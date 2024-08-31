@@ -48,7 +48,6 @@ fun ProfileScreen() {
                 .padding(16.dp)
                 .fillMaxSize(), verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
-
             Card(
                 colors = CardDefaults.cardColors(containerColor = Color.Transparent),
                 shape = RectangleShape

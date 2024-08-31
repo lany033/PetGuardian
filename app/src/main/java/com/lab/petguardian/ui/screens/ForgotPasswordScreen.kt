@@ -38,14 +38,13 @@ fun ForgotPasswordScreen(authManager: AuthManager, backLogin: () -> Unit) {
     val context = LocalContext.current
     var scope = rememberCoroutineScope()
 
-    Scaffold { it ->
+    Scaffold(topBar = {CommonTopBackBar(onClickBackButton = {})}) { it ->
         Column(
             modifier = Modifier
                 .padding(it)
                 .padding(16.dp)
                 .fillMaxSize(), verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
-            CommonBackButton(onClickBackButton = {})
             Card(
                 colors = CardDefaults.cardColors(containerColor = Color.Transparent),
                 shape = RectangleShape
