@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.lab.petguardian.ui.common.CommonBackButton
 import com.lab.petguardian.ui.common.CommonButton
 import com.lab.petguardian.ui.common.CommonTextFieldWithTextAbove
+import com.lab.petguardian.ui.common.CommonTopBackBar
 import kotlinx.coroutines.launch
 
 @Preview
@@ -71,18 +72,5 @@ fun ProfileScreen() {
 
             }, text = "Save")
         }
-    }
-}
-
-@Composable
-fun CommonTopBackBar(onClickBackButton: () -> Unit){
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 10.dp, vertical = 25.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-        shape = RectangleShape
-    ) {
-        CommonBackButton(onClickBackButton = { onClickBackButton() })
     }
 }

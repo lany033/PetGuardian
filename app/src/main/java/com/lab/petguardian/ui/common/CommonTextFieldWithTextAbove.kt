@@ -25,9 +25,11 @@ fun CommonTextFieldWithTextAbove(
     textAbove: String,
     placeholderText: String,
     value: String,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
+    modifier: Modifier? = null
 ) {
     Card(
+        modifier = modifier ?: Modifier,
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         shape = RectangleShape
     ) {

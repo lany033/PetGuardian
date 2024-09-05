@@ -23,7 +23,7 @@ import com.lab.petguardian.R
 
 @Composable
 fun CommonBackButton(modifier: Modifier? = null, onClickBackButton: () -> Unit){
-    Row(modifier = modifier?.fillMaxWidth() ?: Modifier, verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier =  modifier ?: Modifier.fillMaxWidth().padding(vertical = 25.dp), verticalAlignment = Alignment.CenterVertically) {
         IconButton(onClick = { onClickBackButton() }) {
             Icon(
                 imageVector = Icons.Default.ArrowBackIosNew,

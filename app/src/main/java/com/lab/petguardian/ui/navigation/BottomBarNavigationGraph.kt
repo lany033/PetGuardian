@@ -44,10 +44,14 @@ fun NavGraphBuilder.homeNavGraph(
                 },
                 onClickProfile = {
                     navController.navigate(HomeGraph.PROFILE)
+                },
+                onClickAddPet = {
+                    rootNavController.navigate(Graph.ADDPET)
                 }
             )
         }
         composable(route = HomeGraph.PROFILE) { ProfileScreen() }
+
     }
 }
 

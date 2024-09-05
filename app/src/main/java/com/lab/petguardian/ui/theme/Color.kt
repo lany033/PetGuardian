@@ -22,3 +22,6 @@ val Geraldine = Color(0xFFfe7f7d)
 
 val SaffronMango = Color(0xFFfcbf4e)
 val PalePrim = Color(0xFFfefdb7)
+
+val ShockingPink = Color(0xFFe30fc3)
+val Charlotte = Color(0xFFa2dfeb)

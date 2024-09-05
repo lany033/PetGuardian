@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.lab.petguardian.data.AuthManager
+import com.lab.petguardian.ui.screens.AddNewPetScreen
 import com.lab.petguardian.ui.screens.ForgotPasswordScreen
 import com.lab.petguardian.ui.screens.WelcomeScreen
 import com.lab.petguardian.ui.screens.MainScreen
@@ -30,6 +31,7 @@ fun RootNavigationGraph(context: Context, navController: NavHostController) {
                 rootNavController = navController
             )
         }
+        composable(route = Graph.ADDPET) { AddNewPetScreen() }
     }
 }
 
@@ -71,4 +73,5 @@ object Graph {
     const val ROOT = "root_graph"
     const val AUTHENTICATION = "auth_graph"
     const val MAIN = "main_graph"
+    const val ADDPET = "addpet_graph"
 }

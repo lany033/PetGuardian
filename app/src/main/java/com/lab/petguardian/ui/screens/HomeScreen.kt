@@ -16,13 +16,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,14 +43,20 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.lab.petguardian.R
 import com.lab.petguardian.data.AuthManager
-import com.lab.petguardian.ui.common.AddPetItem
-import com.lab.petguardian.ui.common.CommonButtonItem
+import com.lab.petguardian.ui.common.CommonSelectorButtomItem
 import com.lab.petguardian.ui.common.CommonLogoutDialog
 import com.lab.petguardian.ui.common.CommonPetItem
 import com.lab.petguardian.ui.common.CommonPlanItem
+import com.lab.petguardian.ui.common.CommonTextTitle
+import com.lab.petguardian.ui.theme.Geraldine
 
 @Composable
-fun HomeScreen(authManager: AuthManager, onClickLogout: () -> Unit, onClickProfile: () -> Unit) {
+fun HomeScreen(
+    authManager: AuthManager,
+    onClickLogout: () -> Unit,
+    onClickProfile: () -> Unit,
+    onClickAddPet: () -> Unit
+) {
 
     var user = authManager.getCurrentUser()
 
@@ -148,7 +152,12 @@ fun HomeScreen(authManager: AuthManager, onClickLogout: () -> Unit, onClickProfi
                             CommonPetItem(onClickPetView = {}, "Michis")
                         }
                         item {
-                            AddPetItem()
+                            CommonSelectorButtomItem(
+                                "Add Pet",
+                                onClickAddPet = { onClickAddPet() },
+                                icon = Icons.Default.Add,
+                                color = Geraldine
+                            )
                         }
                     }
 
@@ -159,11 +168,7 @@ fun HomeScreen(authManager: AuthManager, onClickLogout: () -> Unit, onClickProfi
                             .padding(top = 16.dp),
                         colors = CardDefaults.cardColors(containerColor = Color.Transparent)
                     ) {
-                        Text(
-                            text = "Next Plans",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp
-                        )
+                        CommonTextTitle("Next Plans")
                         Divider(modifier = Modifier.padding(vertical = 10.dp))
                         LazyColumn(modifier = Modifier.height(300.dp)) {
                             items(6) {

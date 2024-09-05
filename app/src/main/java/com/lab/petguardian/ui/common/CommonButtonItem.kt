@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun CommonButtonItem(onClick: () -> Unit, text: String, modifier: Modifier? = null) {
+fun CommonButtonItem(onClick: () -> Unit, text: String) {
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = { onClick() },
