@@ -2,6 +2,7 @@ package com.lab.petguardian.ui.screens
 
 import android.content.res.Configuration
 import android.os.Build
+import android.widget.Toast
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
@@ -20,6 +21,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -37,6 +40,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -53,8 +57,11 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -80,11 +87,15 @@ import java.text.SimpleDateFormat
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddNewPetScreen() {
+    val context = LocalContext.current
     var namePet by remember { mutableStateOf("") }
     var weight by remember { mutableStateOf("") }
     var showCheckCat by remember { mutableStateOf(false) }
     var showCheckDog by remember { mutableStateOf(false) }
-
+    val radioButtonGenderOptions = listOf("Male", "Female")
+    val (selectedGenderOption, onOptionSelectedGender) = remember { mutableStateOf(radioButtonGenderOptions[0]) }
+    val radioButtonNeuteredOptions = listOf("Yes", "No")
+    val (selectedNeuteredOption, onOptionSelectedNeutered) = remember { mutableStateOf(radioButtonGenderOptions[0]) }
     Scaffold(topBar = {
         CommonBackButton(onClickBackButton = {})
     }) { padding ->
@@ -130,10 +141,11 @@ fun AddNewPetScreen() {
                 )
                 CommonTextFieldWithTextAbove(
                     modifier = Modifier.padding(vertical = 5.dp),
-                    textAbove = "Weight",
+                    textAbove = "Weight (Kg.)",
                     placeholderText = "Add its weight",
                     value = weight,
-                    onValueChange = { weight = it }
+                    onValueChange = { weight = it },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 Text(
                     modifier = Modifier.padding(start = 2.dp, bottom = 6.dp, top = 5.dp),
@@ -145,30 +157,54 @@ fun AddNewPetScreen() {
                 DatePickerDocked()
                 CommonTextTitle(title = "Choose its gender")
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp, vertical = 10.dp),
-                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.selectableGroup(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CommonSelectorButtomItem(
-                        text = "Male",
-                        onClickAddPet = { /*TODO*/ },
-                        icon = Icons.Default.Male,
-                        color = Charlotte,
-                        modifier = Modifier
-                            .size(120.dp)
-                            .padding(horizontal = 5.dp)
-                    )
-                    CommonSelectorButtomItem(
-                        text = "Female",
-                        onClickAddPet = { /*TODO*/ },
-                        icon = Icons.Default.Female,
-                        color = ShockingPink,
-                        modifier = Modifier
-                            .size(120.dp)
-                            .padding(horizontal = 5.dp)
-                    )
+                    radioButtonGenderOptions.forEach { text ->
+                        Row(
+                            modifier = Modifier.selectable(
+                                selected = (text == selectedGenderOption),
+                                onClick = { onOptionSelectedGender(text) },
+                                role = Role.RadioButton
+                            ),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = (text == selectedGenderOption),
+                                onClick = {
+                                    onOptionSelectedGender(text)
+                                    Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+                                }
+                            )
+                            Text(text = text)
+                            Icon(imageVector = if (text == "Male") Icons.Default.Male else Icons.Default.Female, contentDescription = "gender" )
+                        }
+                    }
+                }
+                CommonTextTitle(title = "Is your pet spayed or neutered?")
+                Row(
+                    modifier = Modifier.selectableGroup(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    radioButtonNeuteredOptions.forEach { text ->
+                        Row(
+                            modifier = Modifier.selectable(
+                                selected = (text == selectedNeuteredOption),
+                                onClick = { onOptionSelectedNeutered(text) },
+                                role = Role.RadioButton
+                            ),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = (text == selectedNeuteredOption),
+                                onClick = {
+                                    onOptionSelectedNeutered(text)
+                                    Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+                                }
+                            )
+                            Text(text = text)
+                        }
+                    }
                 }
                 CommonButton(onClick = { /*TODO*/ }, text = "Save")
             }
@@ -223,7 +259,8 @@ fun CommonCardImageChoosePet(
                             text = pet,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.White)
+                            color = Color.White
+                        )
                     }
                 }
             }
