@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -22,6 +23,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Female
 import androidx.compose.material.icons.filled.Male
@@ -48,6 +50,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -77,8 +80,11 @@ import java.text.SimpleDateFormat
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddNewPetScreen() {
-    val namePet by remember { mutableStateOf("") }
-    val weight by remember { mutableStateOf("") }
+    var namePet by remember { mutableStateOf("") }
+    var weight by remember { mutableStateOf("") }
+    var showCheckCat by remember { mutableStateOf(false) }
+    var showCheckDog by remember { mutableStateOf(false) }
+
     Scaffold(topBar = {
         CommonBackButton(onClickBackButton = {})
     }) { padding ->
@@ -96,22 +102,38 @@ fun AddNewPetScreen() {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CommonCardImageChoosePet(painter = R.mipmap.cat_choose)
-                    CommonCardImageChoosePet(painter = R.mipmap.dog_choose)
+                    CommonCardImageChoosePet(
+                        painter = R.mipmap.cat_choose,
+                        showCheck = showCheckCat,
+                        pet = "Cat",
+                        onShowCheck = {
+                            showCheckCat = !showCheckCat
+                            showCheckDog = false
+                        }
+                    )
+                    CommonCardImageChoosePet(
+                        painter = R.mipmap.dog_choose,
+                        showCheck = showCheckDog,
+                        pet = "Dog",
+                        onShowCheck = {
+                            showCheckDog = !showCheckDog
+                            showCheckCat = false
+                        }
+                    )
                 }
                 CommonTextFieldWithTextAbove(
                     modifier = Modifier.padding(vertical = 5.dp),
                     textAbove = "Name Pet",
                     placeholderText = "Write the name of your pet",
                     value = namePet,
-                    onValueChange = { }
+                    onValueChange = { namePet = it }
                 )
                 CommonTextFieldWithTextAbove(
                     modifier = Modifier.padding(vertical = 5.dp),
                     textAbove = "Weight",
                     placeholderText = "Add its weight",
                     value = weight,
-                    onValueChange = { }
+                    onValueChange = { weight = it }
                 )
                 Text(
                     modifier = Modifier.padding(start = 2.dp, bottom = 6.dp, top = 5.dp),
@@ -156,7 +178,13 @@ fun AddNewPetScreen() {
 }
 
 @Composable
-fun CommonCardImageChoosePet(@DrawableRes painter: Int, modifier: Modifier? = null) {
+fun CommonCardImageChoosePet(
+    @DrawableRes painter: Int,
+    modifier: Modifier? = null,
+    pet: String,
+    showCheck: Boolean,
+    onShowCheck: (Boolean) -> Unit
+) {
     Card(
         modifier = modifier ?: Modifier
             .padding(5.dp)
@@ -164,12 +192,42 @@ fun CommonCardImageChoosePet(@DrawableRes painter: Int, modifier: Modifier? = nu
         elevation = CardDefaults.cardElevation(10.dp),
         shape = RoundedCornerShape(30.dp),
     ) {
-        Image(
-            modifier = Modifier.clickable(onClickLabel = "Cat") {},
-            painter = painterResource(id = painter),
-            contentDescription = "choose",
-            contentScale = ContentScale.Crop
-        )
+        Box(modifier = Modifier.fillMaxSize()) {
+            Image(
+                modifier = Modifier.clickable(onClickLabel = "Cat") { onShowCheck(showCheck) },
+                painter = painterResource(id = painter),
+                contentDescription = "choose",
+                contentScale = ContentScale.Crop
+            )
+            if (showCheck) {
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.5f))
+                            )
+                        )
+                ) {
+                    Column(
+                        modifier = Modifier.align(Alignment.Center),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(60.dp),
+                            imageVector = Icons.Default.Check,
+                            contentDescription = "check",
+                            tint = Color.Green
+                        )
+                        Text(
+                            text = pet,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White)
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -219,10 +277,10 @@ fun DatePickerDocked() {
             DatePickerDialog(
                 onDismissRequest = { showDatePicker = false },
                 confirmButton = {
-                Button(onClick = { showDatePicker = false }) {
-                    Text(text = "Cancel")
-                }
-            }) {
+                    Button(onClick = { showDatePicker = false }) {
+                        Text(text = "Cancel")
+                    }
+                }) {
                 DatePicker(state = datePickerState, showModeToggle = true)
             }
         }
