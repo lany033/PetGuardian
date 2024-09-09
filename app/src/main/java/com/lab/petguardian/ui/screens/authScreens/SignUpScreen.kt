@@ -1,4 +1,4 @@
-package com.lab.petguardian.ui.screens
+package com.lab.petguardian.ui.screens.authScreens
 
 import android.content.Context
 import android.widget.Toast
@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.lab.petguardian.data.AuthManager
 import com.lab.petguardian.data.AuthRes
-import com.lab.petguardian.ui.common.CommonBackButton
 import com.lab.petguardian.ui.common.CommonButton
 import com.lab.petguardian.ui.common.CommonTextFieldWithTextAbove
 import com.lab.petguardian.ui.common.CommonTopBackBar

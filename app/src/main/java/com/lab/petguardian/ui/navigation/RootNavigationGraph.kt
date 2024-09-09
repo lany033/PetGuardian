@@ -8,11 +8,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.lab.petguardian.data.AuthManager
-import com.lab.petguardian.ui.screens.AddNewPetScreen
-import com.lab.petguardian.ui.screens.ForgotPasswordScreen
+import com.lab.petguardian.ui.screens.addNewPetScreen.AddNewPetScreen
+import com.lab.petguardian.ui.screens.authScreens.ForgotPasswordScreen
 import com.lab.petguardian.ui.screens.WelcomeScreen
 import com.lab.petguardian.ui.screens.MainScreen
-import com.lab.petguardian.ui.screens.SignUpScreen
+import com.lab.petguardian.ui.screens.authScreens.SignUpScreen
 
 @Composable
 fun RootNavigationGraph(context: Context, navController: NavHostController) {

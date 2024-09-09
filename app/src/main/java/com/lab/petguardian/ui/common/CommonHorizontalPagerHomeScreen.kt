@@ -21,7 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.lab.petguardian.R
-import com.lab.petguardian.model.presentation.Presentation
+import com.lab.petguardian.model.Presentation
 import com.lab.petguardian.ui.theme.Geraldine
 import com.lab.petguardian.ui.theme.PalePrim
 import com.lab.petguardian.ui.theme.SaffronMango

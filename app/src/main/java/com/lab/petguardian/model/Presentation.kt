@@ -1,4 +1,4 @@
-package com.lab.petguardian.model.presentation
+package com.lab.petguardian.model
 
 import com.lab.petguardian.R
 

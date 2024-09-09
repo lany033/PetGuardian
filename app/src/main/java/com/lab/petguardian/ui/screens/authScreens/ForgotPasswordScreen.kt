@@ -1,4 +1,4 @@
-package com.lab.petguardian.ui.screens
+package com.lab.petguardian.ui.screens.authScreens
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement

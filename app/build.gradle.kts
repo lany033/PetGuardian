@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
 }
 
@@ -78,8 +80,6 @@ dependencies {
 
     implementation(libs.accompanist.systemuicontroller)
 
-    implementation ("io.coil-kt:coil-compose:2.0.0")
-
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     //Navigation
@@ -96,5 +96,8 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx")
 
     implementation ("com.google.android.gms:play-services-auth:20.6.0")
+
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
 
 }

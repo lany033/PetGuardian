@@ -9,10 +9,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.lab.petguardian.ui.common.CommonStatusBarColor
 import com.lab.petguardian.ui.navigation.RootNavigationGraph
 import com.lab.petguardian.ui.theme.PetGuardianTheme
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.tasks.await
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private lateinit var navHostController: NavHostController
@@ -28,7 +35,10 @@ class MainActivity : ComponentActivity() {
             PetGuardianTheme {
                 CommonStatusBarColor(navigationBarColor = MaterialTheme.colorScheme.background)
                 RootNavigationGraph(context = this, navController = navHostController)
+
             }
         }
+
     }
+
 }
