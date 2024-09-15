@@ -7,7 +7,7 @@ data class PetResponse(
     val name: String? = null,
     val type: String? = null,
     val weight: Double? = null,
-    val neutered: Boolean = false,
+    val neutered: String? = null,
     val gender: String? = null,
     val dateOfBirth: Timestamp? = null,
 )

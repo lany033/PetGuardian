@@ -1,6 +1,7 @@
 package com.lab.petguardian.data
 
 import android.content.Context
+import android.util.Log
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.snapshots
@@ -9,6 +10,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.tasks.await
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -17,10 +19,8 @@ import javax.inject.Inject
 
 class DatabaseRepository @Inject constructor(
     private val db: FirebaseFirestore,
-    @ApplicationContext private val context: Context
+    auth: AuthManager
 ) {
-
-    private val auth = AuthManager(context)
     private var userId = auth.getCurrentUser()?.uid
 
     fun getPets(): Flow<List<PetModel>> {
@@ -40,7 +40,7 @@ class DatabaseRepository @Inject constructor(
     }
 
     private fun petResponseToDomain(petResponse: PetResponse): PetModel? {
-        if (petResponse.name == null || petResponse.dateOfBirth == null || petResponse.type == null || petResponse.id == null || petResponse.weight == null || petResponse.gender == null) return null
+        if (petResponse.name == null || petResponse.dateOfBirth == null || petResponse.type == null || petResponse.id == null || petResponse.weight == null || petResponse.gender == null || petResponse.neutered == null) return null
         val dateOfBirth = timeStampToString(petResponse.dateOfBirth) ?: return null
         return PetModel(
             name = petResponse.name,
@@ -64,7 +64,8 @@ class DatabaseRepository @Inject constructor(
         }
     }
 
-    fun addPet(pet: PetModel) {
+    suspend fun addPet(pet: PetDto) {
+        val userIdDocument = userId.toString()
         val customId = getCustomId()
         val model = hashMapOf(
             "id" to customId,
@@ -76,8 +77,9 @@ class DatabaseRepository @Inject constructor(
             "gender" to pet.gender
         )
         if (userId != null) {
-            db.collection(userId!!).document(customId).set(model)
+            db.collection("pets").document(userIdDocument).set(model).await()
         }
+        Log.d("Save", userIdDocument)
     }
 
     private fun getCustomId(): String {

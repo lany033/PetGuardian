@@ -11,13 +11,12 @@ import com.lab.petguardian.data.AuthManager
 import com.lab.petguardian.ui.navigation.BottomBarNavGraph
 
 @Composable
-fun MainScreen(authManager: AuthManager, rootNavController: NavHostController) {
+fun MainScreen(rootNavController: NavHostController) {
     val navController = rememberNavController()
     Scaffold(bottomBar = { PetBottomBar(navController = navController) }) { it ->
         Column(Modifier.padding(it)) {
             BottomBarNavGraph(
                 navController = navController,
-                authManager = authManager,
                 rootNavController = rootNavController
             )
         }

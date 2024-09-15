@@ -1,29 +1,29 @@
 package com.lab.petguardian
 
-import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.MaterialTheme
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.lab.petguardian.ui.common.CommonStatusBarColor
 import com.lab.petguardian.ui.navigation.RootNavigationGraph
+import com.lab.petguardian.ui.screens.authScreens.LoginViewModel
+import com.lab.petguardian.ui.screens.addNewPetScreen.PetViewModel
 import com.lab.petguardian.ui.theme.PetGuardianTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.tasks.await
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private lateinit var navHostController: NavHostController
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -33,8 +33,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             navHostController = rememberNavController()
             PetGuardianTheme {
+                val petViewModel by viewModels<PetViewModel>()
+                val loginViewModel by viewModels<LoginViewModel>()
                 CommonStatusBarColor(navigationBarColor = MaterialTheme.colorScheme.background)
-                RootNavigationGraph(context = this, navController = navHostController)
+                RootNavigationGraph(context = this, navController = navHostController, petViewModel = petViewModel, loginViewModel = loginViewModel)
 
             }
         }

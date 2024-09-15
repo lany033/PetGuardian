@@ -1,43 +1,44 @@
 package com.lab.petguardian.ui.navigation
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.lab.petguardian.data.AuthManager
+import com.lab.petguardian.ui.screens.authScreens.LoginViewModel
 import com.lab.petguardian.ui.screens.addNewPetScreen.AddNewPetScreen
 import com.lab.petguardian.ui.screens.authScreens.ForgotPasswordScreen
-import com.lab.petguardian.ui.screens.WelcomeScreen
+import com.lab.petguardian.ui.screens.authScreens.WelcomeScreen
 import com.lab.petguardian.ui.screens.MainScreen
+import com.lab.petguardian.ui.screens.addNewPetScreen.PetViewModel
 import com.lab.petguardian.ui.screens.authScreens.SignUpScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RootNavigationGraph(context: Context, navController: NavHostController) {
-
-    val authManager = AuthManager(context)
+fun RootNavigationGraph(context: Context, navController: NavHostController, petViewModel: PetViewModel, loginViewModel: LoginViewModel) {
 
     NavHost(
         navController = navController,
         route = Graph.ROOT,
         startDestination = Graph.AUTHENTICATION
     ) {
-        authNavGraph(navController = navController, authManager = authManager)
+        authNavGraph(navController = navController, loginViewModel = loginViewModel)
         composable(Graph.MAIN) {
             MainScreen(
-                authManager = authManager,
                 rootNavController = navController
             )
         }
-        composable(route = Graph.ADDPET) { AddNewPetScreen() }
+        composable(route = Graph.ADDPET) { AddNewPetScreen(petViewModel) }
     }
 }
 
 fun NavGraphBuilder.authNavGraph(
     navController: NavHostController,
-    authManager: AuthManager
+    loginViewModel: LoginViewModel
 ) {
     navigation(route = Graph.AUTHENTICATION, startDestination = AuthenticationGraph.LOGIN) {
         composable(AuthenticationGraph.LOGIN) {
@@ -54,15 +55,14 @@ fun NavGraphBuilder.authNavGraph(
                         popUpTo(Graph.AUTHENTICATION)
                     }
                 },
-                authManager = authManager
+                loginViewModel = loginViewModel
             )
         }
         composable(AuthenticationGraph.SIGN_UP) {
-            SignUpScreen(navController, authManager)
+            SignUpScreen(navController)
         }
         composable(AuthenticationGraph.FORGOT_PASSWORD) {
             ForgotPasswordScreen(
-                authManager,
                 backLogin = { navController.navigate(Graph.AUTHENTICATION) })
         }
     }

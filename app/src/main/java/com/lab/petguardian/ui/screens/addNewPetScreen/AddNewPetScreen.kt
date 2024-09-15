@@ -1,6 +1,7 @@
 package com.lab.petguardian.ui.screens.addNewPetScreen
 
 import android.os.Build
+import android.widget.DatePicker
 import android.widget.Toast
 
 import androidx.annotation.DrawableRes
@@ -32,6 +33,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -67,18 +69,28 @@ import com.lab.petguardian.ui.common.CommonTextTitle
 import com.lab.petguardian.ui.theme.Geraldine
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AddNewPetScreen() {
+fun AddNewPetScreen(petViewModel: PetViewModel) {
     val context = LocalContext.current
     var namePet by remember { mutableStateOf("") }
     var weight by remember { mutableStateOf("") }
     var showCheckCat by remember { mutableStateOf(false) }
     var showCheckDog by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState()
     val radioButtonGenderOptions = listOf("Male", "Female")
-    val (selectedGenderOption, onOptionSelectedGender) = remember { mutableStateOf(radioButtonGenderOptions[0]) }
+    val (selectedGenderOption, onOptionSelectedGender) = remember {
+        mutableStateOf(
+            radioButtonGenderOptions[0]
+        )
+    }
     val radioButtonNeuteredOptions = listOf("Yes", "No")
-    val (selectedNeuteredOption, onOptionSelectedNeutered) = remember { mutableStateOf(radioButtonGenderOptions[0]) }
+    val (selectedNeuteredOption, onOptionSelectedNeutered) = remember {
+        mutableStateOf(
+            radioButtonGenderOptions[0]
+        )
+    }
     Scaffold(topBar = {
         CommonBackButton(onClickBackButton = {})
     }) { padding ->
@@ -137,7 +149,7 @@ fun AddNewPetScreen() {
                     fontWeight = FontWeight.Bold,
                     color = Geraldine,
                 )
-                DatePickerDocked()
+                DatePickerDocked(datePickerState)
                 CommonTextTitle(title = "Choose its gender")
                 Row(
                     modifier = Modifier.selectableGroup(),
@@ -160,7 +172,10 @@ fun AddNewPetScreen() {
                                 }
                             )
                             Text(text = text)
-                            Icon(imageVector = if (text == "Male") Icons.Default.Male else Icons.Default.Female, contentDescription = "gender" )
+                            Icon(
+                                imageVector = if (text == "Male") Icons.Default.Male else Icons.Default.Female,
+                                contentDescription = "gender"
+                            )
                         }
                     }
                 }
@@ -189,7 +204,16 @@ fun AddNewPetScreen() {
                         }
                     }
                 }
-                CommonButton(onClick = { /*TODO*/ }, text = "Save")
+                CommonButton(onClick = {
+                    petViewModel.addNewPet(
+                        name = namePet,
+                        type = showCheckCat,
+                        weight = weight.toDouble(),
+                        neutered = selectedNeuteredOption,
+                        gender = selectedGenderOption,
+                        dateOfBirth = datePickerState.selectedDateMillis
+                    )
+                }, text = "Save")
             }
         }
 
@@ -213,7 +237,7 @@ fun CommonCardImageChoosePet(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Image(
-                modifier = Modifier.clickable(onClickLabel = "Cat") { onShowCheck(showCheck) },
+                modifier = Modifier.clickable(onClickLabel = pet) { onShowCheck(showCheck) },
                 painter = painterResource(id = painter),
                 contentDescription = "choose",
                 contentScale = ContentScale.Crop
@@ -254,9 +278,9 @@ fun CommonCardImageChoosePet(
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerDocked() {
+fun DatePickerDocked(datePickerState: DatePickerState) {
     var showDatePicker by remember { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState()
+
 
     val dateToString = datePickerState.selectedDateMillis?.let {
         DateUtils().convertAdjustedMillisToLocalDate(it)

@@ -15,11 +15,10 @@ import com.lab.petguardian.ui.screens.SettingsScreen
 @Composable
 fun BottomBarNavGraph(
     navController: NavHostController,
-    authManager: AuthManager,
     rootNavController: NavHostController
 ) {
     NavHost(navController = navController, startDestination = BottomBarNavItem.Home.route) {
-        homeNavGraph(navController, authManager, rootNavController)
+        homeNavGraph(navController = navController, rootNavController = rootNavController)
         composable(route = BottomBarNavItem.Plans.route) { PlansScreen() }
         composable(route = BottomBarNavItem.Settings.route) { SettingsScreen() }
     }
@@ -27,15 +26,12 @@ fun BottomBarNavGraph(
 
 fun NavGraphBuilder.homeNavGraph(
     navController: NavHostController,
-    authManager: AuthManager,
     rootNavController: NavHostController
 ) {
     navigation(route = BottomBarNavItem.Home.route, startDestination = HomeGraph.HOME) {
         composable(route = HomeGraph.HOME) {
             HomeScreen(
-                authManager = authManager,
                 onClickLogout = {
-                    authManager.signOut()
                     rootNavController.navigate(Graph.AUTHENTICATION) {
                         popUpTo(Graph.ROOT) {
                             inclusive = true

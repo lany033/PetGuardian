@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.lab.petguardian.data.AuthManager
 import com.lab.petguardian.data.AuthRes
 import com.lab.petguardian.ui.common.CommonBackButton
@@ -33,11 +34,12 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun ForgotPasswordScreen(authManager: AuthManager, backLogin: () -> Unit) {
+fun ForgotPasswordScreen(backLogin: () -> Unit) {
 
     var email by remember { mutableStateOf("") }
     val context = LocalContext.current
     var scope = rememberCoroutineScope()
+    val forgotPasswordViewModel: ForgotPasswordViewModel = hiltViewModel()
 
     Scaffold(topBar = {CommonTopBackBar(onClickBackButton = {})}) { it ->
         Column(
@@ -59,19 +61,7 @@ fun ForgotPasswordScreen(authManager: AuthManager, backLogin: () -> Unit) {
                 value = email,
                 onValueChange = { email = it })
 
-            CommonButton(onClick = {
-                scope.launch {
-                    when (val res = authManager.resetPassword(email)) {
-                        is AuthRes.Success -> {
-                            Toast.makeText(context, "Password reset email sent", Toast.LENGTH_SHORT).show()
-                            backLogin()
-                        }
-                        is AuthRes.Error -> {
-                            Toast.makeText(context, "Error al enviar correo", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-            }, text = "Send email")
+            CommonButton(onClick = { forgotPasswordViewModel.sendResetPassword(email = email, backLogin = { backLogin() }) }, text = "Send email")
         }
     }
 

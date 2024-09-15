@@ -25,24 +25,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.lab.petguardian.data.AuthManager
-import com.lab.petguardian.data.AuthRes
 import com.lab.petguardian.ui.common.CommonButton
 import com.lab.petguardian.ui.common.CommonTextFieldWithTextAbove
 import com.lab.petguardian.ui.common.CommonTopBackBar
 import kotlinx.coroutines.launch
 
+
 @Composable
-fun SignUpScreen(navigation: NavController, authManager: AuthManager) {
+fun SignUpScreen(navigation: NavController) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+    var signUpViewModel: SignUpViewModel = hiltViewModel()
+
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    Scaffold(topBar = { CommonTopBackBar(onClickBackButton = {})}) { it ->
+    Scaffold(topBar = { CommonTopBackBar(onClickBackButton = {}) }) { it ->
         Column(
             modifier = Modifier
                 .padding(it)
@@ -70,32 +72,34 @@ fun SignUpScreen(navigation: NavController, authManager: AuthManager) {
                 value = password,
                 onValueChange = { password = it }
             )
-            CommonButton(onClick = {
-                                   scope.launch {
-                                       signUp(email, password, authManager, context, navigation)
-                                   }
-            }, text = "Sign Up")
+            CommonButton(
+                onClick = {
+                    signUpViewModel.createAccountWithEmailAndPassword(email, password) {
+                        scope.launch {
+                            signUp(email, password, context, navigation)
+                        }
+                    }
+                },
+                text = "Sign Up"
+            )
         }
     }
 
 }
 
-private suspend fun signUp(email: String, password: String, authManager: AuthManager, context: Context, navigation: NavController) {
+private fun signUp(
+    email: String,
+    password: String,
+    context: Context,
+    navigation: NavController
+) {
     if (email.isNotEmpty() && password.isNotEmpty()) {
-        when(val result = authManager.createUserWithEmailAndPassword(email, password)){
-            is AuthRes.Success -> {
-                Toast.makeText(context, "Registro exitoso", Toast.LENGTH_SHORT).show()
-                navigation.popBackStack()
-            }
-            is AuthRes.Error -> {
-                Toast.makeText(context, "Error: ${result.errorMessage}", Toast.LENGTH_LONG).show()
-            }
-        }
+        Toast.makeText(context, "Registro exitoso", Toast.LENGTH_SHORT).show()
+        navigation.popBackStack()
     } else {
         Toast.makeText(context, "Existen campos vacios", Toast.LENGTH_SHORT).show()
     }
 }
-
 
 
 /*

@@ -5,7 +5,7 @@ data class PetModel(
     val name: String,
     val type: String,
     val weight: Double,
-    val neutered: Boolean,
+    val neutered: String,
     val gender: String,
     val dateOfBirth: String
     )

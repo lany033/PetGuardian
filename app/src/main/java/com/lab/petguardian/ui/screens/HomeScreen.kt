@@ -39,6 +39,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.lab.petguardian.R
@@ -52,13 +53,14 @@ import com.lab.petguardian.ui.theme.Geraldine
 
 @Composable
 fun HomeScreen(
-    authManager: AuthManager,
     onClickLogout: () -> Unit,
     onClickProfile: () -> Unit,
     onClickAddPet: () -> Unit
 ) {
 
-    var user = authManager.getCurrentUser()
+    val homeViewModel: HomeViewModel = hiltViewModel()
+
+    val user = homeViewModel.getUser()
 
     val context = LocalContext.current
 
@@ -87,7 +89,7 @@ fun HomeScreen(
             Box {
                 if (showDialog) {
                     CommonLogoutDialog(
-                        onConfirmLogout = { onLogoutConfirmed() },
+                        onConfirmLogout = { homeViewModel.signOut { onLogoutConfirmed() } },
                         onDismiss = { showDialog = false },
                         onClickProfile = { onClickProfile() })
                 }

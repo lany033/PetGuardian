@@ -6,7 +6,7 @@ data class PetDto(
     val name: String,
     val type: String,
     val weight: Double,
-    val neutered: Boolean,
+    val neutered: String,
     val gender: String,
     val dateOfBirth: Timestamp
 )
