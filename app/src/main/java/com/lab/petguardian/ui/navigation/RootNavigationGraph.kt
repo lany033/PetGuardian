@@ -19,14 +19,14 @@ import com.lab.petguardian.ui.screens.authScreens.SignUpScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RootNavigationGraph(context: Context, navController: NavHostController, petViewModel: PetViewModel, loginViewModel: LoginViewModel) {
+fun RootNavigationGraph(context: Context, navController: NavHostController, petViewModel: PetViewModel) {
 
     NavHost(
         navController = navController,
         route = Graph.ROOT,
         startDestination = Graph.AUTHENTICATION
     ) {
-        authNavGraph(navController = navController, loginViewModel = loginViewModel)
+        authNavGraph(navController = navController)
         composable(Graph.MAIN) {
             MainScreen(
                 rootNavController = navController
@@ -37,8 +37,7 @@ fun RootNavigationGraph(context: Context, navController: NavHostController, petV
 }
 
 fun NavGraphBuilder.authNavGraph(
-    navController: NavHostController,
-    loginViewModel: LoginViewModel
+    navController: NavHostController
 ) {
     navigation(route = Graph.AUTHENTICATION, startDestination = AuthenticationGraph.LOGIN) {
         composable(AuthenticationGraph.LOGIN) {
@@ -54,8 +53,7 @@ fun NavGraphBuilder.authNavGraph(
                     navController.navigate(Graph.MAIN) {
                         popUpTo(Graph.AUTHENTICATION)
                     }
-                },
-                loginViewModel = loginViewModel
+                }
             )
         }
         composable(AuthenticationGraph.SIGN_UP) {

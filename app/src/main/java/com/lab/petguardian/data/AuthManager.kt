@@ -1,8 +1,6 @@
 package com.lab.petguardian.data
 
-import android.content.Context
 import android.content.Intent
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -12,19 +10,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.Firebase
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.auth
-import com.lab.petguardian.R
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 
 sealed class AuthRes<out T> {
@@ -33,8 +25,7 @@ sealed class AuthRes<out T> {
 }
 
 class AuthManager @Inject constructor(
-    private val auth: FirebaseAuth,
-    @ApplicationContext private val context: Context
+    private val auth: FirebaseAuth
 ) {
     fun getCurrentUser() = auth.currentUser
 
@@ -55,7 +46,7 @@ class AuthManager @Inject constructor(
                 val user = it.user
                 cancellableContinuation.resume(user)
             }.addOnFailureListener {
-                Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                 AuthRes.Error( it.message ?: "Error al iniciar sesión")
             }
         }
@@ -70,28 +61,24 @@ class AuthManager @Inject constructor(
         }
     }
 
-    fun signOut() {
+    fun signOut(signInClient: SignInClient) {
         auth.signOut()
+        signInClient.signOut()
     }
 
-    val googleSignInClient: GoogleSignInClient by lazy {
+
+
+    /*private val googleSignInClient: GoogleSignInClient by lazy {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(context.getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
         GoogleSignIn.getClient(context, gso)
     }
+*/
 
-    fun handleSignInResult(task: Task<GoogleSignInAccount>): AuthRes<GoogleSignInAccount>? {
-        return try {
-            val account = task.getResult(ApiException::class.java)
-            AuthRes.Success(account)
-        } catch (e: ApiException) {
-            AuthRes.Error(e.message ?: "Google sign-in failed.")
-        }
-    }
 
-    suspend fun signInWithGoogleCredential(credential: AuthCredential): AuthRes<FirebaseUser>? {
+  suspend fun signInWithGoogleCredential(credential: AuthCredential): AuthRes<FirebaseUser>? {
         return try {
             val firebaseUser = auth.signInWithCredential(credential).await()
             firebaseUser.user?.let {
@@ -102,10 +89,11 @@ class AuthManager @Inject constructor(
         }
     }
 
-    /*suspend fun loginWithGoogle(idToken: String): FirebaseUser? {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        return signInWithGoogleCredential(credential)
+    /*fun signInWithGoogle(googleSignInLauncher: ActivityResultLauncher<Intent>) {
+        val signInIntent = googleSignInClient.signInIntent
+        googleSignInLauncher.launch(signInIntent)
     }*/
+
 
 
 }

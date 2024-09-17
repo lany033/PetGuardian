@@ -39,7 +39,7 @@ fun SignUpScreen(navigation: NavController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    var signUpViewModel: SignUpViewModel = hiltViewModel()
+    val signUpViewModel: SignUpViewModel = hiltViewModel()
 
     val context = LocalContext.current
     val scope = rememberCoroutineScope()

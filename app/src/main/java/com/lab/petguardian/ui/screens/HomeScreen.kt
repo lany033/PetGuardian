@@ -89,7 +89,7 @@ fun HomeScreen(
             Box {
                 if (showDialog) {
                     CommonLogoutDialog(
-                        onConfirmLogout = { homeViewModel.signOut { onLogoutConfirmed() } },
+                        onConfirmLogout = { homeViewModel.signOut(navigateToWelcomeScreen = { onLogoutConfirmed() }, context = context) },
                         onDismiss = { showDialog = false },
                         onClickProfile = { onClickProfile() })
                 }

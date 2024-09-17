@@ -34,9 +34,8 @@ class MainActivity : ComponentActivity() {
             navHostController = rememberNavController()
             PetGuardianTheme {
                 val petViewModel by viewModels<PetViewModel>()
-                val loginViewModel by viewModels<LoginViewModel>()
                 CommonStatusBarColor(navigationBarColor = MaterialTheme.colorScheme.background)
-                RootNavigationGraph(context = this, navController = navHostController, petViewModel = petViewModel, loginViewModel = loginViewModel)
+                RootNavigationGraph(context = this, navController = navHostController, petViewModel = petViewModel)
 
             }
         }

@@ -1,5 +1,6 @@
 package com.lab.petguardian.ui.common
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -21,10 +22,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.lab.petguardian.R
 import com.lab.petguardian.ui.theme.Geraldine
 
 @Composable
 fun CommonLoginSocialButton(onClick: () -> Unit, text: String, icon: Int) {
+
+
+
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = { onClick() },
@@ -50,3 +58,4 @@ fun CommonLoginSocialButton(onClick: () -> Unit, text: String, icon: Int) {
         }
     }
 }
+

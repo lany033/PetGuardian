@@ -20,9 +20,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
+import com.lab.petguardian.R
 import com.lab.petguardian.data.AuthRes
 import com.lab.petguardian.ui.common.CommonButton
 import com.lab.petguardian.ui.common.CommonHorizontalPagerHomeScreen
@@ -36,9 +40,10 @@ fun WelcomeScreen(
     onClickForgotPassword: () -> Unit,
     onClickHome: () -> Unit,
     onGoogleSignIn: () -> Unit,
-    loginViewModel: LoginViewModel
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
+
+    val loginViewModel: LoginViewModel = hiltViewModel()
 
     val context = LocalContext.current
 
@@ -48,9 +53,11 @@ fun WelcomeScreen(
 
     var password by remember { mutableStateOf("") }
 
-    val googleSignInLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()){ result ->
+    val googleSignInLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()) { result ->
         loginViewModel.loginWithGoogle(activityResult = result, onGoogleSignIn = { onGoogleSignIn() }, context = context)
     }
+
 
     if (showBottomSheet) {
         CommonLoginBottomSheet(
@@ -58,7 +65,7 @@ fun WelcomeScreen(
             onClickSignUp = { onClickSignUp() },
             onClickForgotPassword = { onClickForgotPassword() },
             onClickHome = { loginViewModel.login(email, password, { onClickHome() } , context) },
-            onGoogleSignIn = { loginViewModel.signInWithGoogle(googleSignInLauncher) },
+            onGoogleSignIn = { loginViewModel.signInWithGoogle(googleSignInLauncher, context) },
             email = email,
             password = password,
             onValueEmailChange = { email = it},
