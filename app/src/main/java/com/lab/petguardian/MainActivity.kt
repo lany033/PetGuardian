@@ -34,8 +34,7 @@ class MainActivity : ComponentActivity() {
             navHostController = rememberNavController()
             PetGuardianTheme {
                 CommonStatusBarColor(navigationBarColor = MaterialTheme.colorScheme.background)
-                RootNavigationGraph(context = this, navController = navHostController)
-
+                RootNavigationGraph(navController = navHostController)
             }
         }
 

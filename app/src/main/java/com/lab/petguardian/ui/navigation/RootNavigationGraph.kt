@@ -1,6 +1,5 @@
 package com.lab.petguardian.ui.navigation
 
-import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -9,16 +8,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.lab.petguardian.ui.screens.authScreens.LoginViewModel
-import com.lab.petguardian.ui.screens.addNewPetScreen.AddNewPetScreen
-import com.lab.petguardian.ui.screens.authScreens.ForgotPasswordScreen
-import com.lab.petguardian.ui.screens.authScreens.WelcomeScreen
 import com.lab.petguardian.ui.screens.MainScreen
-import com.lab.petguardian.ui.screens.addNewPetScreen.PetViewModel
+import com.lab.petguardian.ui.screens.authScreens.ForgotPasswordScreen
 import com.lab.petguardian.ui.screens.authScreens.SignUpScreen
+import com.lab.petguardian.ui.screens.authScreens.WelcomeScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RootNavigationGraph(context: Context, navController: NavHostController) {
+fun RootNavigationGraph(navController: NavHostController) {
 
     NavHost(
         navController = navController,
@@ -31,15 +28,7 @@ fun RootNavigationGraph(context: Context, navController: NavHostController) {
                 rootNavController = navController
             )
         }
-        /*composable(route = Graph.ADDPET) {
-            AddNewPetScreen(onClickBackHome = {
-                navController.navigate(Graph.ROOT) {
-                    popUpTo(Graph.MAIN){
-                        inclusive = true
-                    }
-                }
-            })
-        }*/
+
     }
 }
 
@@ -78,5 +67,4 @@ object Graph {
     const val ROOT = "root_graph"
     const val AUTHENTICATION = "auth_graph"
     const val MAIN = "main_graph"
-    const val ADDPET = "addpet_graph"
 }

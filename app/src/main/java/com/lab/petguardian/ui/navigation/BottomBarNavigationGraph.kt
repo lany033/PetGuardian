@@ -57,7 +57,6 @@ fun NavGraphBuilder.homeNavGraph(
 }
 
 
-
 object HomeGraph {
     const val HOME = "home_graph"
     const val PROFILE = "profile_graph"
