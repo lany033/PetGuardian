@@ -19,13 +19,11 @@ import javax.inject.Inject
 
 class DatabaseRepository @Inject constructor(
     private val db: FirebaseFirestore,
-    auth: AuthManager
+    authManager: AuthManager
 ) {
-    private var userId = auth.getCurrentUser()?.uid
+    private var userId = authManager.getCurrentUser()?.uid
 
     fun getPets(): Flow<List<PetModel>> {
-
-        val user = userId.toString()
 
         return if (userId == null) {
             flowOf(emptyList())
@@ -77,7 +75,7 @@ class DatabaseRepository @Inject constructor(
             "gender" to pet.gender
         )
         if (userId != null) {
-            db.collection("pets").document(userIdDocument).set(model).await()
+            db.collection("users").document(userIdDocument).collection("pets").document(customId).set(model).await()
         }
         Log.d("Save", userIdDocument)
     }

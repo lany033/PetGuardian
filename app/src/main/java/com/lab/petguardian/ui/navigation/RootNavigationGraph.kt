@@ -17,9 +17,8 @@ import com.lab.petguardian.ui.screens.MainScreen
 import com.lab.petguardian.ui.screens.addNewPetScreen.PetViewModel
 import com.lab.petguardian.ui.screens.authScreens.SignUpScreen
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RootNavigationGraph(context: Context, navController: NavHostController, petViewModel: PetViewModel) {
+fun RootNavigationGraph(context: Context, navController: NavHostController) {
 
     NavHost(
         navController = navController,
@@ -32,7 +31,15 @@ fun RootNavigationGraph(context: Context, navController: NavHostController, petV
                 rootNavController = navController
             )
         }
-        composable(route = Graph.ADDPET) { AddNewPetScreen(petViewModel) }
+        /*composable(route = Graph.ADDPET) {
+            AddNewPetScreen(onClickBackHome = {
+                navController.navigate(Graph.ROOT) {
+                    popUpTo(Graph.MAIN){
+                        inclusive = true
+                    }
+                }
+            })
+        }*/
     }
 }
 

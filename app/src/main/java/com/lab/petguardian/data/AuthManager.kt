@@ -67,17 +67,6 @@ class AuthManager @Inject constructor(
     }
 
 
-
-    /*private val googleSignInClient: GoogleSignInClient by lazy {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(context.getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-        GoogleSignIn.getClient(context, gso)
-    }
-*/
-
-
   suspend fun signInWithGoogleCredential(credential: AuthCredential): AuthRes<FirebaseUser>? {
         return try {
             val firebaseUser = auth.signInWithCredential(credential).await()
@@ -88,12 +77,5 @@ class AuthManager @Inject constructor(
             AuthRes.Error(e.message ?: "Sign in with Google failed.")
         }
     }
-
-    /*fun signInWithGoogle(googleSignInLauncher: ActivityResultLauncher<Intent>) {
-        val signInIntent = googleSignInClient.signInIntent
-        googleSignInLauncher.launch(signInIntent)
-    }*/
-
-
 
 }

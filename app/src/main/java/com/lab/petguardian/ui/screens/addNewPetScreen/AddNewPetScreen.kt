@@ -60,6 +60,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.lab.petguardian.DateUtils
 import com.lab.petguardian.R
 import com.lab.petguardian.ui.common.CommonBackButton
@@ -72,7 +73,9 @@ import com.lab.petguardian.ui.theme.Geraldine
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AddNewPetScreen(petViewModel: PetViewModel) {
+fun AddNewPetScreen(onClickBackHome: () -> Unit) {
+
+    val petViewModel: PetViewModel = hiltViewModel()
     val context = LocalContext.current
     var namePet by remember { mutableStateOf("") }
     var weight by remember { mutableStateOf("") }
@@ -92,7 +95,7 @@ fun AddNewPetScreen(petViewModel: PetViewModel) {
         )
     }
     Scaffold(topBar = {
-        CommonBackButton(onClickBackButton = {})
+        CommonBackButton(onClickBackButton = { onClickBackHome()})
     }) { padding ->
         LazyColumn(
             modifier = Modifier
@@ -280,7 +283,6 @@ fun CommonCardImageChoosePet(
 @Composable
 fun DatePickerDocked(datePickerState: DatePickerState) {
     var showDatePicker by remember { mutableStateOf(false) }
-
 
     val dateToString = datePickerState.selectedDateMillis?.let {
         DateUtils().convertAdjustedMillisToLocalDate(it)

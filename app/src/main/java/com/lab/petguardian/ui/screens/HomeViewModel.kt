@@ -17,6 +17,7 @@ import javax.inject.Inject
 class HomeViewModel  @Inject constructor(private val authManager: AuthManager) : ViewModel(){
 
     fun getUser(): FirebaseUser? {
+        Log.d("HomeViewModel", authManager.getCurrentUser().toString())
         return authManager.getCurrentUser()
     }
 
@@ -25,11 +26,13 @@ class HomeViewModel  @Inject constructor(private val authManager: AuthManager) :
     }
 
     fun signOut(navigateToWelcomeScreen: () -> Unit, context: Context) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             authManager.signOut(getSignInClient(context))
         }
         navigateToWelcomeScreen()
     }
+
+
 
 }
 

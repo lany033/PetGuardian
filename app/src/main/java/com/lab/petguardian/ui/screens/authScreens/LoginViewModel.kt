@@ -49,13 +49,11 @@ class LoginViewModel @Inject constructor(private val authManager: AuthManager) :
 
     fun signInWithGoogle(googleSignInLauncher: ActivityResultLauncher<Intent>, context: Context) {
 
-        val googleSignInClient: GoogleSignInClient by lazy {
-            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(context.getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
-            GoogleSignIn.getClient(context, gso)
-        }
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(context.getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        val googleSignInClient = GoogleSignIn.getClient(context, gso)
 
         val signInIntent = googleSignInClient.signInIntent
         try {
@@ -70,10 +68,13 @@ class LoginViewModel @Inject constructor(private val authManager: AuthManager) :
     private fun handleSignInResult(task: Task<GoogleSignInAccount>): AuthRes<GoogleSignInAccount>? {
         return try {
             val account = task.getResult(ApiException::class.java)
-            AuthRes.Success(account)
+            if (account != null) {
+                AuthRes.Success(account)
+            } else {
+                AuthRes.Error("Google sign-in failed: No account found.")
+            }
         } catch (e: ApiException) {
-            AuthRes.Error(e.message ?: "Google sign-in failed.")
-
+            AuthRes.Error("Google sign-in failed with error code: ${e.statusCode}")
         }
     }
 
@@ -82,19 +83,20 @@ class LoginViewModel @Inject constructor(private val authManager: AuthManager) :
         onGoogleSignIn: () -> Unit,
         context: Context
     ) {
-        val account = handleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(activityResult.data))
+        val account =
+            handleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(activityResult.data))
         when (account) {
             is AuthRes.Success -> {
                 val credential = GoogleAuthProvider.getCredential(account.data.idToken, null)
                 viewModelScope.launch {
                     try {
-                        withContext(Dispatchers.IO) {
-                            val fireUser = authManager.signInWithGoogleCredential(credential)
-                            if (fireUser != null) {
-                                onGoogleSignIn()
-                            }
-                            Log.d("LoginViewModel", "User logged in with Google: $fireUser")
+
+                        val fireUser = authManager.signInWithGoogleCredential(credential)
+                        if (fireUser != null) {
+                            onGoogleSignIn()
                         }
+                        Log.d("LoginViewModel", "User logged in with Google: $fireUser")
+
                     } catch (e: Exception) {
                         AuthRes.Error(e.message ?: "Ocurrio un error")
                     }
@@ -115,23 +117,5 @@ class LoginViewModel @Inject constructor(private val authManager: AuthManager) :
             }
         }
     }
-
-
-//    suspend fun signInWithGoogleCredential(credential: AuthCredential): AuthRes<FirebaseUser>? {
-//        return try {
-//            val firebaseUser = auth.signInWithCredential(credential).await()
-//            firebaseUser.user?.let {
-//                AuthRes.Success(it)
-//            } ?: throw Exception("Sign in with Google failed.")
-//        } catch (e: Exception) {
-//            AuthRes.Error(e.message ?: "Sign in with Google failed.")
-//        }
-//    }
-//
-//    fun signInWithGoogle(googleSignInLauncher: ActivityResultLauncher<Intent>) {
-//        val signInIntent = googleSignInClient.signInIntent
-//        googleSignInLauncher.launch(signInIntent)
-//    }
-
 
 }

@@ -7,11 +7,7 @@ plugins {
 }
 
 android {
-    signingConfigs {
-        create("release") {
-            storeFile = file("C:\\Users\\lany0\\petguardiankey\\pet-keystore.jks")
-        }
-    }
+
     namespace = "com.lab.petguardian"
     compileSdk = 34
 
@@ -35,7 +31,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("release")
         }
 
     }
@@ -95,7 +90,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
 
-    implementation ("com.google.android.gms:play-services-auth:21.2.0")
+    implementation (libs.play.services.auth)
 
 
     implementation("com.google.dagger:hilt-android:2.48")

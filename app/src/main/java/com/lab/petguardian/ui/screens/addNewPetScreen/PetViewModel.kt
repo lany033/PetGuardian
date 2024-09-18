@@ -14,7 +14,7 @@ import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
-class PetViewModel @Inject constructor(val databaseRepository: DatabaseRepository) : ViewModel() {
+class PetViewModel @Inject constructor(private val databaseRepository: DatabaseRepository) : ViewModel() {
     var _petState = MutableStateFlow(PetUiState())
     val petState: StateFlow<PetUiState> = _petState
 
