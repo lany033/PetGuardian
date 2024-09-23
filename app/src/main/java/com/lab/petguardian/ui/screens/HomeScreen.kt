@@ -24,6 +24,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +40,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.lazy.items
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -59,6 +61,8 @@ fun HomeScreen(
 ) {
 
     val homeViewModel: HomeViewModel = hiltViewModel()
+
+    val homeUisState: HomeUiState by homeViewModel.homeUiState.collectAsState()
 
     val user = homeViewModel.getUser()
 
@@ -150,8 +154,8 @@ fun HomeScreen(
                         horizontalArrangement = Arrangement.Center,
                         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        item(3) {
-                            CommonPetItem(onClickPetView = {}, "Michis")
+                        items(homeUisState.petListByUser) {pet ->
+                            CommonPetItem(onClickPetView = {}, namePet = pet.name)
                         }
                         item {
                             CommonSelectorButtomItem(

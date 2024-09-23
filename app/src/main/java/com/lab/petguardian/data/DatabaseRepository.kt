@@ -28,7 +28,7 @@ class DatabaseRepository @Inject constructor(
         return if (userId == null) {
             flowOf(emptyList())
         } else {
-            db.collection(userId!!).snapshots().map { qs ->
+            db.collection("users").document(userId!!).collection("pets").snapshots().map { qs ->
                 qs.toObjects(PetResponse::class.java).mapNotNull { petResponse ->
                     petResponseToDomain(petResponse)
                 }

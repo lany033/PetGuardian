@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.MaterialTheme
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -13,8 +12,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.lab.petguardian.ui.common.CommonStatusBarColor
 import com.lab.petguardian.ui.navigation.RootNavigationGraph
-import com.lab.petguardian.ui.screens.authScreens.LoginViewModel
-import com.lab.petguardian.ui.screens.addNewPetScreen.PetViewModel
 import com.lab.petguardian.ui.theme.PetGuardianTheme
 import dagger.hilt.android.AndroidEntryPoint
 

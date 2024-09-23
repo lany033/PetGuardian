@@ -1,7 +1,6 @@
 package com.lab.petguardian.ui.screens.addNewPetScreen
 
 import android.os.Build
-import android.widget.DatePicker
 import android.widget.Toast
 
 import androidx.annotation.DrawableRes
@@ -44,6 +43,8 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -75,7 +76,7 @@ import com.lab.petguardian.ui.theme.Geraldine
 @Composable
 fun AddNewPetScreen(onClickBackHome: () -> Unit) {
 
-    val petViewModel: PetViewModel = hiltViewModel()
+    val petViewModel: AddNewPetViewModel = hiltViewModel()
     val context = LocalContext.current
     var namePet by remember { mutableStateOf("") }
     var weight by remember { mutableStateOf("") }
@@ -94,8 +95,20 @@ fun AddNewPetScreen(onClickBackHome: () -> Unit) {
             radioButtonGenderOptions[0]
         )
     }
+    val addPetState by petViewModel.addPetState.collectAsState()
+
+    LaunchedEffect(addPetState) {
+        addPetState.let { state ->
+            if (state.isSuccessful){
+                onClickBackHome()
+            } else {
+                Toast.makeText(context, state.error, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     Scaffold(topBar = {
-        CommonBackButton(onClickBackButton = { onClickBackHome()})
+        CommonBackButton(onClickBackButton = { onClickBackHome() })
     }) { padding ->
         LazyColumn(
             modifier = Modifier
@@ -171,7 +184,6 @@ fun AddNewPetScreen(onClickBackHome: () -> Unit) {
                                 selected = (text == selectedGenderOption),
                                 onClick = {
                                     onOptionSelectedGender(text)
-                                    Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
                                 }
                             )
                             Text(text = text)
@@ -200,7 +212,6 @@ fun AddNewPetScreen(onClickBackHome: () -> Unit) {
                                 selected = (text == selectedNeuteredOption),
                                 onClick = {
                                     onOptionSelectedNeutered(text)
-                                    Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
                                 }
                             )
                             Text(text = text)
@@ -211,7 +222,7 @@ fun AddNewPetScreen(onClickBackHome: () -> Unit) {
                     petViewModel.addNewPet(
                         name = namePet,
                         type = showCheckCat,
-                        weight = weight.toDouble(),
+                        weight = if(weight.isNotEmpty())weight.toDouble() else 0.0,
                         neutered = selectedNeuteredOption,
                         gender = selectedGenderOption,
                         dateOfBirth = datePickerState.selectedDateMillis
@@ -332,13 +343,3 @@ fun DatePickerDocked(datePickerState: DatePickerState) {
         }
     }
 }
-/*
-
-@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Composable
-fun AddNewPetScreenPreview() {
-    PetGuardianTheme {
-        AddNewPetScreen()
-    }
-
-}*/

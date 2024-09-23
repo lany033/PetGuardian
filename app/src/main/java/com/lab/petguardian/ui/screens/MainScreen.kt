@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.lab.petguardian.data.AuthManager
 import com.lab.petguardian.ui.navigation.BottomBarNavGraph
 import com.lab.petguardian.ui.navigation.HomeGraph
 

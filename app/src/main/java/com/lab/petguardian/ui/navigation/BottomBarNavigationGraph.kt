@@ -52,7 +52,15 @@ fun NavGraphBuilder.homeNavGraph(
             )
         }
         composable(route = HomeGraph.PROFILE) { ProfileScreen() }
-        composable(route = HomeGraph.ADD_PET) { AddNewPetScreen( onClickBackHome = {} ) }
+        composable(route = HomeGraph.ADD_PET) {
+            AddNewPetScreen(onClickBackHome = {
+                navController.navigate(HomeGraph.HOME) {
+                    popUpTo(HomeGraph.HOME){
+                        inclusive = true
+                    }
+                }
+            })
+        }
     }
 }
 
