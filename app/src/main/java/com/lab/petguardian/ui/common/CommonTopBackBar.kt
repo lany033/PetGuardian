@@ -20,6 +20,6 @@ fun CommonTopBackBar(onClickBackButton: () -> Unit){
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         shape = RectangleShape
     ) {
-        CommonBackButton(onClickBackButton = { onClickBackButton() })
+        CommonTextButtonWithIcon(onClickBackButton = { onClickBackButton() })
     }
 }

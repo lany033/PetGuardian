@@ -1,6 +1,5 @@
 package com.lab.petguardian.ui.screens
 
-import android.content.res.Configuration
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -22,12 +21,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Balance
 import androidx.compose.material.icons.filled.CatchingPokemon
 import androidx.compose.material.icons.filled.Female
 import androidx.compose.material.icons.filled.Male
-import androidx.compose.material.icons.filled.Palette
-import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -47,17 +45,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lab.petguardian.R
-import com.lab.petguardian.petAge
-import com.lab.petguardian.ui.common.CommonBackButton
+import com.lab.petguardian.ui.common.CommonTextButtonWithIcon
 import com.lab.petguardian.ui.common.CommonPlanItem
 import com.lab.petguardian.ui.theme.Geraldine
-import com.lab.petguardian.ui.theme.PetGuardianTheme
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -68,10 +63,10 @@ fun PetDetailScreen(petId: String?, onClickBackButton: () -> Unit) {
     val petDetailState by petDetailViewModel.petDetailState.collectAsState()
 
     Scaffold(topBar = {
-        CommonBackButton(
+        CommonTextButtonWithIcon(
             modifier = Modifier
                 .padding(top = WindowInsets.safeContent.asPaddingValues().calculateTopPadding()),
-            onClickBackButton = {  onClickBackButton() }
+            onClickBackButton = { onClickBackButton() }
         )
     }) { it ->
 
@@ -126,7 +121,11 @@ fun PetDetailScreen(petId: String?, onClickBackButton: () -> Unit) {
                     shape = RectangleShape,
                     colors = CardDefaults.cardColors(containerColor = Color.Transparent)
                 ) {
-                    Text(text = petDetailState.namePet, fontWeight = FontWeight.Bold, fontSize = 25.sp)
+                    Text(
+                        text = petDetailState.namePet,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 25.sp
+                    )
                     Text(text = "${petDetailState.ages} years")
                     Spacer(modifier = Modifier.height(20.dp))
                     Row(
@@ -153,19 +152,30 @@ fun PetDetailScreen(petId: String?, onClickBackButton: () -> Unit) {
                     }
                 }
                 Card(
-                    modifier = Modifier
+                    modifier = Modifier.fillMaxWidth()
                         .height(250.dp)
                         .zIndex(1f),
                     shape = RoundedCornerShape(30.dp)
                 ) {
-                    Text(
-                        modifier = Modifier
-                            .padding(horizontal = 20.dp)
-                            .padding(top = 20.dp),
-                        text = "Next Plans",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(top = 10.dp),
+                            text = "Next Plans",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        CommonTextButtonWithIcon(
+                            modifier = Modifier.padding(10.dp),
+                            onClickBackButton = {},
+                            imageVector = Icons.Default.Add,
+                            text = "Add"
+                        )
+                    }
+
                     LazyColumn(modifier = Modifier.padding(10.dp)) {
                         items(6) {
                             CommonPlanItem()

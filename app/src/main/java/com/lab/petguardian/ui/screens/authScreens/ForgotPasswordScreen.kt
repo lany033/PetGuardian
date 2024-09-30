@@ -1,6 +1,5 @@
 package com.lab.petguardian.ui.screens.authScreens
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,17 +19,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.lab.petguardian.data.AuthManager
-import com.lab.petguardian.data.AuthRes
-import com.lab.petguardian.ui.common.CommonBackButton
 import com.lab.petguardian.ui.common.CommonButton
 import com.lab.petguardian.ui.common.CommonTextFieldWithTextAbove
 import com.lab.petguardian.ui.common.CommonTopBackBar
-import kotlinx.coroutines.launch
 
 
 @Composable
