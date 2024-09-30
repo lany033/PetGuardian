@@ -44,8 +44,6 @@ class AddNewPetViewModel @Inject constructor(private val databaseRepository: Dat
             }
         }
     }
-
-
 }
 
 data class AddPetUiState(

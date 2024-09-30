@@ -21,7 +21,7 @@ fun MainScreen(rootNavController: NavHostController) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
     Scaffold(bottomBar = {
-        if (currentRoute != HomeGraph.PROFILE && currentRoute != HomeGraph.ADD_PET) {
+        if (currentRoute != HomeGraph.PROFILE && currentRoute != HomeGraph.ADD_PET && currentRoute != HomeGraph.DETAIL_PET) {
             PetBottomBar(navController = navController)
         }
     }) { it ->

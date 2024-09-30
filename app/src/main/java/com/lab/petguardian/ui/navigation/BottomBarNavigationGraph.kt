@@ -5,11 +5,14 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.lab.petguardian.data.AuthManager
 import com.lab.petguardian.ui.screens.HomeScreen
+import com.lab.petguardian.ui.screens.PetDetailScreen
 import com.lab.petguardian.ui.screens.PlansScreen
 import com.lab.petguardian.ui.screens.ProfileScreen
 import com.lab.petguardian.ui.screens.SettingsScreen
@@ -48,6 +51,9 @@ fun NavGraphBuilder.homeNavGraph(
                 },
                 onClickAddPet = {
                     navController.navigate(HomeGraph.ADD_PET)
+                },
+                onClickDetailPet = { petId ->
+                    navController.navigate(HomeGraph.DETAIL_PET.replace("{petId}", petId))
                 }
             )
         }
@@ -55,11 +61,23 @@ fun NavGraphBuilder.homeNavGraph(
         composable(route = HomeGraph.ADD_PET) {
             AddNewPetScreen(onClickBackHome = {
                 navController.navigate(HomeGraph.HOME) {
-                    popUpTo(HomeGraph.HOME){
+                    popUpTo(HomeGraph.HOME) {
                         inclusive = true
                     }
                 }
             })
+        }
+        composable(
+            route = HomeGraph.DETAIL_PET,
+            arguments = listOf(navArgument(name = "petId") { type = NavType.StringType })
+        ) { backstackEntry ->
+            PetDetailScreen( petId = backstackEntry.arguments?.getString("petId"), onClickBackButton = {
+                navController.navigate(HomeGraph.HOME) {
+                    popUpTo(HomeGraph.HOME) {
+                        inclusive = true
+                    }
+                }
+            } )
         }
     }
 }
@@ -69,6 +87,7 @@ object HomeGraph {
     const val HOME = "home_graph"
     const val PROFILE = "profile_graph"
     const val ADD_PET = "add_pet_graph"
+    const val DETAIL_PET = "detail_pet_graph/{petId}"
 }
 
 

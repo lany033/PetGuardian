@@ -8,4 +8,4 @@ data class PetModel(
     val neutered: String,
     val gender: String,
     val dateOfBirth: String
-    )
+)

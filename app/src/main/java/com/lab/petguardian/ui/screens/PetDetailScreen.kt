@@ -1,7 +1,9 @@
 package com.lab.petguardian.ui.screens
 
 import android.content.res.Configuration
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +24,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Balance
 import androidx.compose.material.icons.filled.CatchingPokemon
+import androidx.compose.material.icons.filled.Female
+import androidx.compose.material.icons.filled.Male
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material3.Card
@@ -30,6 +34,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -44,21 +51,38 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.lab.petguardian.R
+import com.lab.petguardian.petAge
 import com.lab.petguardian.ui.common.CommonBackButton
 import com.lab.petguardian.ui.common.CommonPlanItem
 import com.lab.petguardian.ui.theme.Geraldine
 import com.lab.petguardian.ui.theme.PetGuardianTheme
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun PetDetailScreen() {
-    var context = LocalContext.current
+fun PetDetailScreen(petId: String?, onClickBackButton: () -> Unit) {
+    val context = LocalContext.current
+    val petDetailViewModel: PetDetailViewModel = hiltViewModel()
+
+    val petDetailState by petDetailViewModel.petDetailState.collectAsState()
+
     Scaffold(topBar = {
         CommonBackButton(
             modifier = Modifier
                 .padding(top = WindowInsets.safeContent.asPaddingValues().calculateTopPadding()),
-            onClickBackButton = { Toast.makeText(context, "Back", Toast.LENGTH_SHORT).show() })
+            onClickBackButton = {  onClickBackButton() }
+        )
     }) { it ->
+
+        LaunchedEffect(key1 = petId) {
+            if (petId != null) {
+                petDetailViewModel.getPetById(petId)
+            } else {
+                Toast.makeText(context, "Pet not found", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -84,7 +108,8 @@ fun PetDetailScreen() {
             Card(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .height(50.dp).fillMaxWidth(),
+                    .height(50.dp)
+                    .fillMaxWidth(),
                 shape = RectangleShape
             ) {}
             Card(
@@ -101,8 +126,8 @@ fun PetDetailScreen() {
                     shape = RectangleShape,
                     colors = CardDefaults.cardColors(containerColor = Color.Transparent)
                 ) {
-                    Text(text = "Michina", fontWeight = FontWeight.Bold, fontSize = 25.sp)
-                    Text(text = "2 years old")
+                    Text(text = petDetailState.namePet, fontWeight = FontWeight.Bold, fontSize = 25.sp)
+                    Text(text = "${petDetailState.ages} years")
                     Spacer(modifier = Modifier.height(20.dp))
                     Row(
                         modifier = Modifier
@@ -111,23 +136,18 @@ fun PetDetailScreen() {
                     ) {
                         PetFeatureItem(
                             featureName = "Type",
-                            featureValue = "Cat",
+                            featureValue = petDetailState.type,
                             icon = Icons.Default.CatchingPokemon
                         )
 
                         PetFeatureItem(
                             featureName = "Sex",
-                            featureValue = "Male",
-                            icon = Icons.Default.Pets
-                        )
-                        PetFeatureItem(
-                            featureName = "Color",
-                            featureValue = "Naranjoso",
-                            icon = Icons.Default.Palette
+                            featureValue = petDetailState.gender,
+                            icon = if (petDetailState.gender == "Female") Icons.Default.Female else Icons.Default.Male
                         )
                         PetFeatureItem(
                             featureName = "Weight",
-                            featureValue = "5 kg",
+                            featureValue = petDetailState.weight.toString(),
                             icon = Icons.Default.Balance
                         )
                     }
@@ -170,14 +190,5 @@ fun PetFeatureItem(featureName: String, featureValue: String, icon: ImageVector)
         )
         Text(text = featureName)
         Text(text = featureValue, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-    }
-}
-
-
-@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun PetDetailScreenPreview() {
-    PetGuardianTheme {
-        PetDetailScreen()
     }
 }

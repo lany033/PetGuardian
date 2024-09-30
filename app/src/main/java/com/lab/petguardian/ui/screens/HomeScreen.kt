@@ -57,7 +57,8 @@ import com.lab.petguardian.ui.theme.Geraldine
 fun HomeScreen(
     onClickLogout: () -> Unit,
     onClickProfile: () -> Unit,
-    onClickAddPet: () -> Unit
+    onClickAddPet: () -> Unit,
+    onClickDetailPet: (String) -> Unit
 ) {
 
     val homeViewModel: HomeViewModel = hiltViewModel()
@@ -155,7 +156,7 @@ fun HomeScreen(
                         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                     ) {
                         items(homeUisState.petListByUser) {pet ->
-                            CommonPetItem(onClickPetView = {}, namePet = pet.name)
+                            CommonPetItem(onClickPetView = {onClickDetailPet(pet.id)}, namePet = pet.name)
                         }
                         item {
                             CommonSelectorButtomItem(

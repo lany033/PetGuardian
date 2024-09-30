@@ -1,17 +1,16 @@
 package com.lab.petguardian.data
 
-import android.content.Context
 import android.util.Log
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.snapshots
 import com.lab.petguardian.model.PetModel
-import dagger.hilt.android.qualifiers.ApplicationContext
+import com.lab.petguardian.petResponseToDomain
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -37,30 +36,25 @@ class DatabaseRepository @Inject constructor(
 
     }
 
-    private fun petResponseToDomain(petResponse: PetResponse): PetModel? {
-        if (petResponse.name == null || petResponse.dateOfBirth == null || petResponse.type == null || petResponse.id == null || petResponse.weight == null || petResponse.gender == null || petResponse.neutered == null) return null
-        val dateOfBirth = timeStampToString(petResponse.dateOfBirth) ?: return null
-        return PetModel(
-            name = petResponse.name,
-            dateOfBirth = dateOfBirth,
-            type = petResponse.type,
-            id = petResponse.id,
-            weight = petResponse.weight,
-            neutered = petResponse.neutered,
-            gender = petResponse.gender
-        )
+    fun getPetById(id: String): Flow<PetModel?> {
+        return flow {
+            val petDocument = db.collection("users")
+                .document(userId!!)
+                .collection("pets")
+                .document(id)
+                .get()
+                .await()
+
+            if (petDocument.exists()) {
+                val pet = petDocument.toObject(PetResponse::class.java)
+                emit(pet?.let { petResponseToDomain(it) })
+            } else {
+                emit(null) // Devuelve null si no existe el documento
+            }
+        }
+
     }
 
-    private fun timeStampToString(timestamp: Timestamp?): String? {
-        timestamp ?: return null
-        return try {
-            val date = timestamp.toDate()
-            val sdf = SimpleDateFormat("EEEE dd MMMM", Locale.getDefault())
-            sdf.format(date)
-        } catch (e: Exception) {
-            null
-        }
-    }
 
     suspend fun addPet(pet: PetDto) {
         val userIdDocument = userId.toString()
@@ -75,7 +69,8 @@ class DatabaseRepository @Inject constructor(
             "gender" to pet.gender
         )
         if (userId != null) {
-            db.collection("users").document(userIdDocument).collection("pets").document(customId).set(model).await()
+            db.collection("users").document(userIdDocument).collection("pets").document(customId)
+                .set(model).await()
         }
         Log.d("Save", userIdDocument)
     }

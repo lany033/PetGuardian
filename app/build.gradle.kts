@@ -4,6 +4,7 @@ plugins {
     kotlin("kapt")
     alias(libs.plugins.androidHilt)
     id("com.google.gms.google-services")
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 android {
@@ -92,8 +93,9 @@ dependencies {
 
     implementation (libs.play.services.auth)
 
+    implementation(libs.kotlinx.serialization.json)
 
-    implementation("com.google.dagger:hilt-android:2.48")
+    implementation("com.google.dagger:hilt-android:2.49")
     kapt("com.google.dagger:hilt-android-compiler:2.48")
     implementation (libs.androidx.hilt.navigation.compose)
 

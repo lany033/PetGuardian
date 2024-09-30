@@ -12,6 +12,7 @@ import com.lab.petguardian.ui.screens.MainScreen
 import com.lab.petguardian.ui.screens.authScreens.ForgotPasswordScreen
 import com.lab.petguardian.ui.screens.authScreens.SignUpScreen
 import com.lab.petguardian.ui.screens.authScreens.WelcomeScreen
+import kotlinx.serialization.Serializable
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -61,7 +62,6 @@ fun NavGraphBuilder.authNavGraph(
         }
     }
 }
-
 
 object Graph {
     const val ROOT = "root_graph"

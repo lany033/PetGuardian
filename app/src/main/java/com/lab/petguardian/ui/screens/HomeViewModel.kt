@@ -48,7 +48,7 @@ class HomeViewModel @Inject constructor(
         navigateToWelcomeScreen()
     }
 
-    fun getPetListByUser() {
+    private fun getPetListByUser() {
         viewModelScope.launch {
             databaseRepository.getPets().collect { petList ->
                 _homeUiState.update { homeUiState ->
