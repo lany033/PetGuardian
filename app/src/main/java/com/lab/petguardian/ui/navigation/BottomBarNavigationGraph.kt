@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.lab.petguardian.data.AuthManager
+import com.lab.petguardian.ui.screens.AddPlanScreen
 import com.lab.petguardian.ui.screens.HomeScreen
 import com.lab.petguardian.ui.screens.PetDetailScreen
 import com.lab.petguardian.ui.screens.PlansScreen
@@ -77,8 +78,9 @@ fun NavGraphBuilder.homeNavGraph(
                         inclusive = true
                     }
                 }
-            } )
+            }, onClickAddPlan = { navController.navigate(HomeGraph.ADD_PLAN)} )
         }
+        composable(route = HomeGraph.ADD_PLAN){ AddPlanScreen()}
     }
 }
 
@@ -87,6 +89,7 @@ object HomeGraph {
     const val HOME = "home_graph"
     const val PROFILE = "profile_graph"
     const val ADD_PET = "add_pet_graph"
+    const val ADD_PLAN = "add_plan_graph"
     const val DETAIL_PET = "detail_pet_graph/{petId}"
 }
 

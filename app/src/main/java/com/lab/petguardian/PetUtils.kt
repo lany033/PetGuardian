@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.firebase.Timestamp
 import com.lab.petguardian.data.PetDto
+import com.lab.petguardian.data.PetPlanDto
 import com.lab.petguardian.data.PetResponse
 import com.lab.petguardian.model.PetModel
 import java.lang.Exception
@@ -39,6 +40,28 @@ fun prepareDTO(
 
     return try {
         PetDto(name, typePet, weight, neutered, gender, timeStamp)
+    } catch (e: Exception) {
+        null
+    }
+}
+
+fun preparePetPlanDTO(
+    name: String,
+    date: Long?,
+    description: String,
+    isCompleted: Boolean
+): PetPlanDto? {
+    if (name.isBlank()) return null
+    val timeStamp = if (date != null) {
+        val seconds = date / 1000
+        val nanoseconds = ((date % 1000) * 1000000).toInt()
+        Timestamp(seconds, nanoseconds)
+    } else {
+        Timestamp.now()
+    }
+
+    return try {
+        PetPlanDto(name, timeStamp,description, isCompleted)
     } catch (e: Exception) {
         null
     }

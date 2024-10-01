@@ -56,7 +56,7 @@ import com.lab.petguardian.ui.theme.Geraldine
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun PetDetailScreen(petId: String?, onClickBackButton: () -> Unit) {
+fun PetDetailScreen(petId: String?, onClickBackButton: () -> Unit, onClickAddPlan: () -> Unit) {
     val context = LocalContext.current
     val petDetailViewModel: PetDetailViewModel = hiltViewModel()
 
@@ -170,7 +170,7 @@ fun PetDetailScreen(petId: String?, onClickBackButton: () -> Unit) {
                         Spacer(modifier = Modifier.weight(1f))
                         CommonTextButtonWithIcon(
                             modifier = Modifier.padding(10.dp),
-                            onClickBackButton = {},
+                            onClickBackButton = {onClickAddPlan()},
                             imageVector = Icons.Default.Add,
                             text = "Add"
                         )

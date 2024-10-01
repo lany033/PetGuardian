@@ -79,21 +79,20 @@ class DatabaseRepository @Inject constructor(
         return Date().time.toString()
     }
 
-    suspend fun addPlanByPet(pet: PetDto) {
+    suspend fun addPlanByPet(petPlanDto: PetPlanDto) {
         val userIdDocument = userId.toString()
         val customId = getCustomId()
+        val documentReference= db.collection("users").document(userIdDocument).collection("plans").document(customId)
         val model = hashMapOf(
             "id" to customId,
-            "name" to pet.name,
-            "dateOfBirth" to pet.dateOfBirth,
-            "type" to pet.type,
-            "weight" to pet.weight,
-            "neutered" to pet.neutered,
-            "gender" to pet.gender
+            "name" to petPlanDto.namePet,
+            "date" to petPlanDto.date,
+            "description" to petPlanDto.description,
+            "isCompleted" to petPlanDto.isCompleted,
+            "petPlanReference" to documentReference
         )
         if (userId != null) {
-            db.collection("users").document(userIdDocument).collection("pets").document(customId)
-                .set(model).await()
+            documentReference.set(model).await()
         }
         Log.d("Save", userIdDocument)
     }

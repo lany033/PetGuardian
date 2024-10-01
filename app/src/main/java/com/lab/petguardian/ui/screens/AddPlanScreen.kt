@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.lab.petguardian.ui.common.CommonTextButtonWithIcon
 import com.lab.petguardian.ui.common.CommonButton
 import com.lab.petguardian.ui.common.CommonDatePickerDocked
@@ -37,6 +38,8 @@ import com.lab.petguardian.ui.common.CommonTextFieldWithTextAbove
 fun AddPlanScreen() {
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
+
+    val addPlanScreenViewModel: AddPlanScreenViewModel = hiltViewModel()
 
     val datePickerState = rememberDatePickerState()
 
@@ -67,17 +70,17 @@ fun AddPlanScreen() {
                 onValueChange = { description = it }
             )
             CommonDatePickerDocked(datePickerState = datePickerState)
-            CommonButton(onClick = {}, text = "Save")
+            CommonButton(onClick = {
+                addPlanScreenViewModel.addPlan(
+                    name = title,
+                    description = description,
+                    date = datePickerState.selectedDateMillis,
+                    isCompleted = false
+                )
+            }, text = "Save")
 
         }
 
     }
 }
 
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview
-@Composable
-fun AddPlanScreenPreview() {
-    AddPlanScreen()
-}
