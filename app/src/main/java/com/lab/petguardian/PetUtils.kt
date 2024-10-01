@@ -6,8 +6,10 @@ import androidx.annotation.RequiresApi
 import com.google.firebase.Timestamp
 import com.lab.petguardian.data.PetDto
 import com.lab.petguardian.data.PetPlanDto
+import com.lab.petguardian.data.PetPlanResponse
 import com.lab.petguardian.data.PetResponse
 import com.lab.petguardian.model.PetModel
+import com.lab.petguardian.model.PetPlanModel
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -46,12 +48,13 @@ fun prepareDTO(
 }
 
 fun preparePetPlanDTO(
-    name: String,
+    title: String,
     date: Long?,
     description: String,
-    isCompleted: Boolean
+    isCompleted: Boolean,
+    petId: String
 ): PetPlanDto? {
-    if (name.isBlank()) return null
+    if (title.isBlank()) return null
     val timeStamp = if (date != null) {
         val seconds = date / 1000
         val nanoseconds = ((date % 1000) * 1000000).toInt()
@@ -61,7 +64,7 @@ fun preparePetPlanDTO(
     }
 
     return try {
-        PetPlanDto(name, timeStamp,description, isCompleted)
+        PetPlanDto(title, timeStamp,description, isCompleted, petId)
     } catch (e: Exception) {
         null
     }
@@ -78,6 +81,19 @@ fun petResponseToDomain(petResponse: PetResponse): PetModel? {
         weight = petResponse.weight,
         neutered = petResponse.neutered,
         gender = petResponse.gender
+    )
+}
+
+fun petPlanResponseToDomain(petPlanResponse: PetPlanResponse): PetPlanModel? {
+    if (petPlanResponse.id == null || petPlanResponse.petId == null || petPlanResponse.title == null || petPlanResponse.description == null || petPlanResponse.date == null ) return null
+    val date = timeStampToString(petPlanResponse.date) ?: return null
+    return PetPlanModel(
+        title = petPlanResponse.title,
+        date = date,
+        description = petPlanResponse.description,
+        isCompleted = petPlanResponse.isCompleted,
+        id = petPlanResponse.id,
+        petId = petPlanResponse.petId
     )
 }
 

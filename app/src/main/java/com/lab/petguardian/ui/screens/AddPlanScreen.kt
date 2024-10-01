@@ -35,7 +35,7 @@ import com.lab.petguardian.ui.common.CommonTextFieldWithTextAbove
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddPlanScreen() {
+fun AddPlanScreen(petId: String?, onBackClick: () -> Unit) {
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
 
@@ -43,7 +43,7 @@ fun AddPlanScreen() {
 
     val datePickerState = rememberDatePickerState()
 
-    Scaffold(topBar = { CommonTextButtonWithIcon(onClickBackButton = { }) }) { it ->
+    Scaffold(topBar = { CommonTextButtonWithIcon(onClickBackButton = { onBackClick() }) }) { it ->
         Column(
             modifier = Modifier
                 .padding(it)
@@ -75,7 +75,8 @@ fun AddPlanScreen() {
                     name = title,
                     description = description,
                     date = datePickerState.selectedDateMillis,
-                    isCompleted = false
+                    isCompleted = false,
+                    petId = petId ?: ""
                 )
             }, text = "Save")
 

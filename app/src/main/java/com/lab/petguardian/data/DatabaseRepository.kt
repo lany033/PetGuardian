@@ -5,6 +5,8 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.snapshots
 import com.lab.petguardian.model.PetModel
+import com.lab.petguardian.model.PetPlanModel
+import com.lab.petguardian.petPlanResponseToDomain
 import com.lab.petguardian.petResponseToDomain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -52,7 +54,6 @@ class DatabaseRepository @Inject constructor(
                 emit(null) // Devuelve null si no existe el documento
             }
         }
-
     }
 
 
@@ -85,16 +86,29 @@ class DatabaseRepository @Inject constructor(
         val documentReference= db.collection("users").document(userIdDocument).collection("plans").document(customId)
         val model = hashMapOf(
             "id" to customId,
-            "name" to petPlanDto.namePet,
+            "title" to petPlanDto.title,
             "date" to petPlanDto.date,
             "description" to petPlanDto.description,
             "isCompleted" to petPlanDto.isCompleted,
-            "petPlanReference" to documentReference
+            "petId" to petPlanDto.petId
         )
         if (userId != null) {
             documentReference.set(model).await()
         }
         Log.d("Save", userIdDocument)
+    }
+
+    fun getPlans(): Flow<List<PetPlanModel>> {
+        return if (userId == null) {
+            flowOf(emptyList())
+        } else {
+            db.collection("users").document(userId!!).collection("plans").snapshots().map { qs ->
+                qs.toObjects(PetPlanResponse::class.java).mapNotNull { petResponse ->
+                    petPlanResponseToDomain(petResponse)
+                }
+            }
+        }
+
     }
 
 }

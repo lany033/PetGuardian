@@ -72,15 +72,38 @@ fun NavGraphBuilder.homeNavGraph(
             route = HomeGraph.DETAIL_PET,
             arguments = listOf(navArgument(name = "petId") { type = NavType.StringType })
         ) { backstackEntry ->
-            PetDetailScreen( petId = backstackEntry.arguments?.getString("petId"), onClickBackButton = {
-                navController.navigate(HomeGraph.HOME) {
-                    popUpTo(HomeGraph.HOME) {
-                        inclusive = true
+            PetDetailScreen(
+                petId = backstackEntry.arguments?.getString("petId"),
+                onClickBackButton = {
+                    navController.navigate(HomeGraph.HOME) {
+                        popUpTo(HomeGraph.HOME) {
+                            inclusive = true
+                        }
                     }
-                }
-            }, onClickAddPlan = { navController.navigate(HomeGraph.ADD_PLAN)} )
+                },
+                onClickAddPlan = { petId ->
+                    navController.navigate(
+                        HomeGraph.ADD_PLAN.replace(
+                            "{petId}",
+                            petId ?: ""
+                        )
+                    )
+                })
         }
-        composable(route = HomeGraph.ADD_PLAN){ AddPlanScreen()}
+        composable(
+            route = HomeGraph.ADD_PLAN,
+            arguments = listOf(navArgument(name = "petId") { type = NavType.StringType })
+        ) { backstackEntry ->
+            AddPlanScreen(
+                petId = backstackEntry.arguments?.getString("petId"),
+                onBackClick = {
+                    navController.navigate(HomeGraph.HOME) {
+                        popUpTo(HomeGraph.HOME) {
+                            inclusive = true
+                        }
+                    }
+                })
+        }
     }
 }
 
@@ -89,7 +112,7 @@ object HomeGraph {
     const val HOME = "home_graph"
     const val PROFILE = "profile_graph"
     const val ADD_PET = "add_pet_graph"
-    const val ADD_PLAN = "add_plan_graph"
+    const val ADD_PLAN = "add_plan_graph/{petId}"
     const val DETAIL_PET = "detail_pet_graph/{petId}"
 }
 

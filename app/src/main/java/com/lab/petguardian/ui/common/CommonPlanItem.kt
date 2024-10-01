@@ -26,14 +26,14 @@ import com.lab.petguardian.R
 
 
 @Composable
-fun CommonPlanItem() {
+fun CommonPlanItem(date: String, title: String, description: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 5.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "08/09/2024")
+        Text(text = date)
         Spacer(modifier = Modifier.width(20.dp))
         Card(
             modifier = Modifier.fillMaxWidth(),
@@ -57,8 +57,8 @@ fun CommonPlanItem() {
                     shape = RectangleShape,
                     colors = CardDefaults.cardColors(containerColor = Color.Transparent)
                 ) {
-                    Text(text = "Bebito", fontWeight = FontWeight.Bold)
-                    Text(text = "Proxima desparasitacion")
+                    Text(text = title, fontWeight = FontWeight.Bold)
+                    Text(text = description)
                 }
             }
         }

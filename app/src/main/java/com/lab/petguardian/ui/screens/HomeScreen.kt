@@ -178,8 +178,8 @@ fun HomeScreen(
                         CommonTextTitle("Next Plans")
                         Divider(modifier = Modifier.padding(vertical = 10.dp))
                         LazyColumn(modifier = Modifier.height(300.dp)) {
-                            items(6) {
-                                CommonPlanItem()
+                            items(homeUisState.petPlansList) {petPlan->
+                                CommonPlanItem(description = petPlan.description, date = petPlan.date, title = petPlan.title)
                             }
                         }
                     }

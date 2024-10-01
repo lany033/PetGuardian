@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.lab.petguardian.data.AuthManager
 import com.lab.petguardian.data.DatabaseRepository
 import com.lab.petguardian.model.PetModel
+import com.lab.petguardian.model.PetPlanModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +30,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         getPetListByUser()
+        getPlansByUser()
     }
 
 
@@ -59,10 +61,21 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun getPlansByUser() {
+        viewModelScope.launch {
+            databaseRepository.getPlans().collect{ petPlanList ->
+                _homeUiState.update { homeUiState ->
+                    homeUiState.copy(petPlansList = petPlanList)
+                }
+            }
+        }
+    }
+
 }
 
 data class HomeUiState(
     val isLoading: Boolean = false,
-    val petListByUser: List<PetModel> = emptyList()
+    val petListByUser: List<PetModel> = emptyList(),
+    val petPlansList: List<PetPlanModel> = emptyList()
 )
 

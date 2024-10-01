@@ -22,10 +22,11 @@ class AddPlanScreenViewModel @Inject constructor(
         name: String,
         description: String,
         date: Long?,
-        isCompleted: Boolean
+        isCompleted: Boolean,
+        petId: String
     ){
         viewModelScope.launch {
-            val petPlanDto = preparePetPlanDTO(name, date, description, isCompleted)
+            val petPlanDto = preparePetPlanDTO(name, date, description, isCompleted, petId)
             if (petPlanDto != null) {
                 databaseRepository.addPlanByPet(petPlanDto)
             }

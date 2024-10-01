@@ -5,9 +5,9 @@ import com.google.firebase.firestore.DocumentReference
 
 data class PetPlanResponse(
     val id: String? = null,
-    val namePet: String? = null,
+    val title: String? = null,
     val date: Timestamp? = null,
     val description: String? = null,
     val isCompleted: Boolean = false,
-    val petPlanReference: DocumentReference? = null
+    val petId: String? = null
 )
