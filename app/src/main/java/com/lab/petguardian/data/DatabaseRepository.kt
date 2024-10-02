@@ -90,7 +90,8 @@ class DatabaseRepository @Inject constructor(
             "date" to petPlanDto.date,
             "description" to petPlanDto.description,
             "isCompleted" to petPlanDto.isCompleted,
-            "petId" to petPlanDto.petId
+            "petId" to petPlanDto.petId,
+            "petName" to petPlanDto.petName
         )
         if (userId != null) {
             documentReference.set(model).await()

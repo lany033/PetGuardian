@@ -1,6 +1,7 @@
 package com.lab.petguardian.ui.screens
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,9 +44,20 @@ fun AddPlanScreen(petId: String?, onBackClick: () -> Unit) {
 
     val addPlanScreenViewModel: AddPlanScreenViewModel = hiltViewModel()
 
+    val addPlanState: AddPlanState by addPlanScreenViewModel.addPlanState.collectAsState()
+
     val datePickerState = rememberDatePickerState()
 
     Scaffold(topBar = { CommonTextButtonWithIcon(onClickBackButton = { onBackClick() }) }) { it ->
+
+        LaunchedEffect(key1 = petId) {
+            if (petId != null) {
+                addPlanScreenViewModel.getPetById(petId)
+            } else {
+                Log.d("AddPlanScreen", "petId is null")
+            }
+        }
+
         Column(
             modifier = Modifier
                 .padding(it)
@@ -55,6 +69,7 @@ fun AddPlanScreen(petId: String?, onBackClick: () -> Unit) {
                 shape = RectangleShape
             ) {
                 Text(text = "Add New Plan", fontSize = 25.sp, fontWeight = FontWeight.Bold)
+                Text(text = addPlanState.namePet, fontSize = 25.sp, fontWeight = FontWeight.Bold)
             }
             CommonTextFieldWithTextAbove(
                 textAbove = "Title",
@@ -72,7 +87,8 @@ fun AddPlanScreen(petId: String?, onBackClick: () -> Unit) {
             CommonDatePickerDocked(datePickerState = datePickerState)
             CommonButton(onClick = {
                 addPlanScreenViewModel.addPlan(
-                    name = title,
+                    petName = addPlanState.namePet,
+                    titlePlan = title,
                     description = description,
                     date = datePickerState.selectedDateMillis,
                     isCompleted = false,

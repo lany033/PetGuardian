@@ -84,7 +84,6 @@ fun HomeScreen(
         onClickLogout()
     }
 
-
     Scaffold { padding ->
         Column(
             modifier = Modifier
@@ -179,7 +178,7 @@ fun HomeScreen(
                         Divider(modifier = Modifier.padding(vertical = 10.dp))
                         LazyColumn(modifier = Modifier.height(300.dp)) {
                             items(homeUisState.petPlansList) {petPlan->
-                                CommonPlanItem(description = petPlan.description, date = petPlan.date, title = petPlan.title)
+                                CommonPlanItem(title = petPlan.title, date = petPlan.date, namePet = petPlan.petName)
                             }
                         }
                     }

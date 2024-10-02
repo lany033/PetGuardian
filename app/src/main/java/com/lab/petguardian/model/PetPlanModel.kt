@@ -6,5 +6,6 @@ data class PetPlanModel(
     val date: String,
     val description: String,
     val isCompleted: Boolean,
-    val petId: String
+    val petId: String,
+    val petName: String
 )

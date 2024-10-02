@@ -9,5 +9,6 @@ data class PetPlanResponse(
     val date: Timestamp? = null,
     val description: String? = null,
     val isCompleted: Boolean = false,
-    val petId: String? = null
+    val petId: String? = null,
+    val petName: String? = null,
 )

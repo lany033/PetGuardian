@@ -48,13 +48,14 @@ fun prepareDTO(
 }
 
 fun preparePetPlanDTO(
-    title: String,
+    petName: String,
+    titlePlan: String,
     date: Long?,
     description: String,
     isCompleted: Boolean,
     petId: String
 ): PetPlanDto? {
-    if (title.isBlank()) return null
+    if (titlePlan.isBlank()) return null
     val timeStamp = if (date != null) {
         val seconds = date / 1000
         val nanoseconds = ((date % 1000) * 1000000).toInt()
@@ -64,7 +65,7 @@ fun preparePetPlanDTO(
     }
 
     return try {
-        PetPlanDto(title, timeStamp,description, isCompleted, petId)
+        PetPlanDto(petName, titlePlan, timeStamp,description, isCompleted, petId)
     } catch (e: Exception) {
         null
     }
@@ -85,7 +86,7 @@ fun petResponseToDomain(petResponse: PetResponse): PetModel? {
 }
 
 fun petPlanResponseToDomain(petPlanResponse: PetPlanResponse): PetPlanModel? {
-    if (petPlanResponse.id == null || petPlanResponse.petId == null || petPlanResponse.title == null || petPlanResponse.description == null || petPlanResponse.date == null ) return null
+    if (petPlanResponse.id == null || petPlanResponse.petId == null || petPlanResponse.title == null || petPlanResponse.description == null || petPlanResponse.date == null || petPlanResponse.petName == null) return null
     val date = timeStampToString(petPlanResponse.date) ?: return null
     return PetPlanModel(
         title = petPlanResponse.title,
@@ -93,7 +94,8 @@ fun petPlanResponseToDomain(petPlanResponse: PetPlanResponse): PetPlanModel? {
         description = petPlanResponse.description,
         isCompleted = petPlanResponse.isCompleted,
         id = petPlanResponse.id,
-        petId = petPlanResponse.petId
+        petId = petPlanResponse.petId,
+        petName = petPlanResponse.petName
     )
 }
 

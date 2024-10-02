@@ -9,5 +9,5 @@ data class PetResponse(
     val weight: Double? = null,
     val neutered: String? = "No",
     val gender: String? = "Male",
-    val dateOfBirth: Timestamp? = null,
+    val dateOfBirth: Timestamp? = null
 )
