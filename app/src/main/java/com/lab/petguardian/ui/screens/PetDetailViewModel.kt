@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lab.petguardian.data.DatabaseRepository
+import com.lab.petguardian.model.PetPlanModel
 import com.lab.petguardian.petAge
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +25,7 @@ class PetDetailViewModel @Inject constructor(private val databaseRepository: Dat
     @RequiresApi(Build.VERSION_CODES.O)
     fun getPetById(id: String) {
         viewModelScope.launch {
+            getPlansByUser(id)
             val petDetail = databaseRepository.getPetById(id)
             petDetail.collect { petModel ->
                 try {
@@ -45,6 +47,18 @@ class PetDetailViewModel @Inject constructor(private val databaseRepository: Dat
 
     }
 
+    private fun getPlansByUser(id: String){
+        viewModelScope.launch {
+            databaseRepository.getPlans().collect{ petPlanList ->
+                _petDetailState.update {
+                    it.copy(
+                        planList = petPlanList.filter { it.petId == id }
+                    )
+                }
+            }
+        }
+    }
+
 }
 
 
@@ -54,5 +68,6 @@ data class PetDetailState(
     val gender: String = "",
     val type: String = "",
     val weight: Double = 0.0,
-    val ages: String = ""
+    val ages: String = "",
+    val planList: List<PetPlanModel> = emptyList()
 )

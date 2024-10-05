@@ -51,6 +51,7 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lab.petguardian.R
 import com.lab.petguardian.ui.common.CommonTextButtonWithIcon
+import androidx.compose.foundation.lazy.items
 import com.lab.petguardian.ui.common.CommonPlanItem
 import com.lab.petguardian.ui.theme.Geraldine
 
@@ -177,8 +178,8 @@ fun PetDetailScreen(petId: String?, onClickBackButton: () -> Unit, onClickAddPla
                     }
 
                     LazyColumn(modifier = Modifier.padding(10.dp)) {
-                        items(6) {
-
+                        items(petDetailState.planList) { petPlans ->
+                           CommonPlanItem(title = petPlans.title, date = petPlans.date, namePet = petPlans.petName)
                         }
                     }
                 }
